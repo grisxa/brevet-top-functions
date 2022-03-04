@@ -1,0 +1,21 @@
+swagger: '2.0'
+info:
+  title: hello_api
+  description: API Gateway to hello_world
+  version: 1.0.0
+schemes:
+  - https
+produces:
+  - application/json
+paths:
+  /hello:
+    get:
+      summary: Greet a user
+      operationId: hello
+      x-google-backend:
+        address: https://us-central1-baltic-star-cloud.cloudfunctions.net/helloGET
+      responses:
+        '200':
+          description: A successful response
+          schema:
+            type: string

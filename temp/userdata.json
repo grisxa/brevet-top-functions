@@ -1,0 +1,40 @@
+{
+    "user": {
+        "uid": "TWjyFz47LuSnOmnG9EDGCXVTpWY2",
+        "email": "grisxa@gmail.com",
+        "emailVerified": false,
+        "displayName": "Григорий Баталов",
+        "isAnonymous": false,
+        "providerData": [],
+        "stsTokenManager": {
+            "refreshToken": "AIwUaOluiUMPjfmr9h7as_N5_8DxIEHa92QPXwycOvKXTFk2Q0zNOL9aI0POVsb0G52Uqv3Ru9yLM6J-2S8DUtf8JMoS3Rw7A479LrtLw63ssPjdnO-MgfUl-63QQ5YOrJU-JjGY8_h-yz4OjBmKJrIOHnzE1AEqUK6ay7EMwA0eQ9XsDiYLWXOp7l7b2BUgKH4evWKzgkVgcAgNyl-xZs7XKC8qcRVXGjWDtceHw1QxxfuSy4bzAz--f4hRL65Y6N5-JEm70jGko3fqrjCNqzsAjS8qMhB95wjdbEUC6fLpBFs8rBCBV5uzyXJq1t7LGfGhrmEerV9GgpQ5ONKGNDy2952EuuX-798MKCt8rhM14ruurC8VhcsiXsa0M6he03LTjICeyKk1ucSM5UK_wbkYHGCFlZtNeZcom_TnU5CH0xi5XYbGQ0IPGOqswJI0yoO9R0Sj7JI8ZwJKHJW6HH6xitL2StHmkw",
+            "accessToken": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImYyNGYzMTQ4MTk3ZWNlYTUyOTE3YzNmMTgzOGFiNWQ0ODg3ZWEwNzYiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoi0JPRgNC40LPQvtGA0LjQuSDQkdCw0YLQsNC70L7QsiIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9iYWx0aWMtc3Rhci1jbG91ZCIsImF1ZCI6ImJhbHRpYy1zdGFyLWNsb3VkIiwiYXV0aF90aW1lIjoxNjQ0NjkxMDU0LCJ1c2VyX2lkIjoiVFdqeUZ6NDdMdVNuT21uRzlFREdDWFZUcFdZMiIsInN1YiI6IlRXanlGejQ3THVTbk9tbkc5RURHQ1hWVHBXWTIiLCJpYXQiOjE2NDQ2OTQzNTUsImV4cCI6MTY0NDY5Nzk1NSwiZW1haWwiOiJncmlzeGFAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7Im9pZGMuYmFsdGljc3RhciI6WyIxODAiXSwiZW1haWwiOlsiZ3Jpc3hhQGdtYWlsLmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6Im9pZGMuYmFsdGljc3RhciIsInNpZ25faW5fYXR0cmlidXRlcyI6eyJhdF9oYXNoIjoiYzNlX1cwSnFLRXV1eTlTaURrZXpXUSIsImNvdW50cnkiOiLQoNC-0YHRgdC40Y8iLCJjaXR5Ijoi0KHQsNC90LrRgi3Qn9C10YLQtdGA0LHRg9GA0LMiLCJiaXJ0aERhdGUiOiIxOTc3LTA2LTA1In19fQ.S72Fn_y_eVZwvUPJgAzKW3QJQgzu3xKfEmv4UcFuuAc2Ltyn0hcsPBan79dh48Pvmghu6p9wRr1SntQ3Tefss1Bjplg1fTiFVM3EFKATN1w41CY4hx-kfyA0kbaVRUEms1eT3k8maoYHUewJu5aNdb3rF85cEqmvN39yWsNif2Eo3Te7YsgmnDwdevBpQOlVvxavYUqis4j2JmMGvfolqCZETSfZmhpWAm7S9cK-xECcBqAu4Deg6h51Qaxfa0ztIzAjPSVU3hRQPvi_CppsWJE_rV0AuC9n01MgOVsDm49vsIMeoQlrDD5qTwQte_BN9GtAfeuPdCbB-Kg9byLHjg",
+            "expirationTime": 1644697955689
+        },
+        "apiKey": "AIzaSyDFARdLmRxUGyLfCStOwfxMWRBEcWCkqto",
+        "appName": "[DEFAULT]"
+    },
+    "credential": {
+        "idToken": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2F1dGguYmFsdGljc3Rhci5zcGIucnUiLCJhdWQiOlsiMGU4NThjNDItMDI2My00NTA4LThjNzgtZDg3YzMyZTFlMDMzIl0sImlhdCI6MTY0NDY5MTA1MywiZXhwIjoxNjQ0Njk0NjUzLCJhdXRoX3RpbWUiOjE2NDQ2OTEwNDksIm5vbmNlIjoiMWQ4MjMwZDU2YzQyOTY0NzMxYTg4NWEzNmNhNGFmMzZjMGEyZDczODZmZDJhZDBkZmFiZDYwN2VhMDk2YWI0ZiIsImF0X2hhc2giOiJjM2VfVzBKcUtFdXV5OVNpRGtleldRIiwic3ViIjoiMTgwIiwibmlja25hbWUiOiJncmlzeGEiLCJnaXZlbl9uYW1lIjoi0JPRgNC40LPQvtGA0LjQuSIsImZhbWlseV9uYW1lIjoi0JHQsNGC0LDQu9C-0LIiLCJuYW1lIjoi0JPRgNC40LPQvtGA0LjQuSDQkdCw0YLQsNC70L7QsiIsImNpdHkiOiLQodCw0L3QutGCLdCf0LXRgtC10YDQsdGD0YDQsyIsImNvdW50cnkiOiLQoNC-0YHRgdC40Y8iLCJiaXJ0aERhdGUiOiIxOTc3LTA2LTA1IiwiZW1haWwiOiJncmlzeGFAZ21haWwuY29tIn0.jbbMRBtqQvvg8HQNeKdVgKn1Wc5OjbHsR6m5Ismp5W14x1i9QWipSktgp36fBaiI3IF03BORQDhpqV0M1ETS7xGSIbzn3FXpYSsgk4p6lGJL6daQVyvMDe6KPgHRK5jiALlTcRzYjdxjxwmoaiBqGQdIsOFFllxUOGdNPspUp40",
+        "accessToken": "a7RGtcUSYAEePVIxulxRbfmnMqUzEafAjMQBRzhUwU",
+        "pendingToken": "AMzJoSn4Td58K6hc4yqcmw4veCZ26ZpqYcttmMVK01q1yajBQ_7sL5P6YuxfaU5zr5ExUDdD5KMa-X8NDTEXG8tT_rjHKQzk6VewHyGZ-6vN8E5Re_Of-ZcSY4Q8yrZNBPNueK-_Istetr6aE12GnCSsnc9FCSTCHMBdnvcMa2DOEtKux57Pk_GdVZvsuvU3GftrAzfXATbwbL8V0SYdpf9fBpO-nL7xGEfa2T6i8c0oWMe4NKIxb02pwsTiLTYTzjelIFtuYpI4iLMN7EJJokNPFgBqmHQVF1FcoMZboeOwclog1va5q5G4jBPqGMLgeP75-QlwIg4OUkUaSGrBOiCHbgmLdWTSLQdZFdN8qNPBIc8kL1OsqCSa0pscxA6JqXuQNp2Mo2XRYpEhLgk7UqCQ4cdhoLW-mgqMLGVRaWJZfhuG2POIZ7e1efsBVN_CeIOT_vw_1LxoaTmluu4eeTQGdWPeXO_JewSfWvOy-v_AIP1pHAByTCcp_7kxfC-nZVrQX9408MAelIHn9UjiFEYr3mrWlkrCJ6OAHHm5yKYOVlvCNhrNnHPtomV6IMgqsY33HMmlAVo3mqKBcnqIuMomDhSvGZK1Aag-rC4e2dMqMyEC0LdeeMVkSonfra8fBCj1Uf41bJK_D3M09Y2BRmu_YmqYFSMwhstPzDd5Vaa3HubrG_uDb6zdkM2L0MukPYh2uirxD8oA321GHMDH_a8XPdT1_4snm-kJCxQmlEnERvkdK-zhdEA3eB1aV75GzfiNxFr2C9PUtBKaKDI5lvWHjifJZpK99MuEbJIMonbnXWjYns13msAS3SPkvVf1jSBQ2ED9T9atQQaO5QWjt4Lr1OYwe7JtBIg5ArbU3owu4VLaATtFv6fQLvP7SiHvsxDu4TKJ1bCGMCt7ZusVAMlmFIKsM1U2CdtdWD42diaj5N1CYPDWkBR8rwd7qivle9KlwK5xaPnNqWpPPX0hyra5KvAsBYN4cRaxJHfWJ4ounlafvOTEPyxNxOaN56iDiobNZYVG_J4yvQOd61PrFthInuvXPjyzoJ9AuEqYeEDAsufW7jWUjKuoi-ox3aZLChPKDmEeTQuNhyJIY9R-bMPuHZvYNZaSOYgWCxeF9c1bGbuvU1psKF3EGzb5UugbwWhyu0Sn8NUCAeyU1InMg_RNBD6klrg6R3BIS6_hAYEL1LyMm0swPk2E4VOhqnnyydVvk-37TkBC_l-RkAV_A5_cn2xozekYEhcLgm493HQVbEO-pV2S9F3gaMgClBAnoVuSWyqsRX8cXXjd-_nM5jW2sg9N3vdybwp11SB9hvYa64_zBTnoQCcf1anlHmThBOOlk6nErqNN8puWGbGrKV-5pPtSbE7QpgQ95kyRQKyjZhnfWDnjLg1SC795srp3AMTO4gddAyc7r6UoIEo4oIGUGKlRuDpMqoWLG0RJIHRaQL5Ft477aIXD385zYp4Q8QMZIrDcu7-PKtZVqOXa-nA3JZLimt3D1fGAvOvBF6CH4aJGQwRsMwVF1L51UH_2uR9fMiHGkjaTkgkJoeuiguDULsd5dbg71xRq7E9g9fZHHhR8x8qxzj_F0Vs5g9eJVvjQ2OfpiVBZiFJ_pABausbR2pyg5NofY1hNCsd6nNWoOxDui6YnshtjHdaxELzHgufN-NQN4cACcAJZ-773cgCfB46KnH93Ctk7b1sXoTqEKPM_ltpGhkE4E9rJ-OXawVdRppmzuD903sYFK_6Z8f2cQ89YDDQCOwgtIwwAumbMitsjok95sVn85UWDTsKTHIKFHaDu7XUvKK2In11DROMPK8k37WJIgsxBxclLaDIzK9xYN9i4OjfrzTGeGuRb57FgQ4QLX3sesKa5VPFlOagDb584BBvQziGxkYjl-D75iNmEnXpIvFFB1Ul9JcCLTG1A1RwRvngVyDXvl1ELA2loHqNzM3rHU8q13sq9KQz_4eedX6s7duUUjXbHNMqJQdHHqIrdFrjVIv-VFt1URj19myvQqjouDwi9DaZ8XzOEDmXHq6Co9kU8YBVNEdIBfgMwxJ8z7D1OYTtHsXehB29dEYypCuEEagAEadjN7aLAClTCPzR_U7F2Bt_3dWzNAr7Yutn9-ZMTy_osxMLLiCPjbfE7GV47VdrFBILApdPyOapsyGd-8YQ_sDLWy1cmCNGguM8xcZLfXK_9L1q1_cbbkCUDuy0GBVOsP0xsX8NPdp4TiHJ7_zI",
+        "providerId": "oidc.balticstar",
+        "signInMethod": "oidc.balticstar"
+    },
+    "operationType": "signIn",
+    "additionalUserInfo": {
+        "isNewUser": false,
+        "providerId": "oidc.balticstar",
+        "profile": {
+            "country": "Россия",
+            "sub": "180",
+            "city": "Санкт-Петербург",
+            "name": "Григорий Баталов",
+            "nickname": "grisxa",
+            "given_name": "Григорий",
+            "birthDate": "1977-06-05",
+            "family_name": "Баталов",
+            "email": "grisxa@gmail.com"
+        }
+    }
+}

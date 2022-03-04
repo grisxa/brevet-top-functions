@@ -1,0 +1,34 @@
+{
+  "context": {
+    "eventId": "cb8d0383-9a90-49b8-aa69-eac1a48a7cf7-0",
+    "timestamp": "2021-09-30T01:05:30.638223Z",
+    "eventType": "google.pubsub.topic.publish",
+    "resource": {
+      "service": "pubsub.googleapis.com",
+      "name": "projects/baltic-star-cloud/topics/strava",
+      "type": "type.googleapis.com/google.pubsub.v1.PubsubMessage"
+    }
+  },
+  "data-event": {
+    "@type": "type.googleapis.com/google.pubsub.v1.PubsubMessage",
+    "data": "eyJhc3BlY3RfdHlwZSI6ICJ1cGRhdGUiLCAiZXZlbnRfdGltZSI6IDE2NDEzNDIyNDEsICJvYmplY3RfaWQiOiA5MTY3NjYxLCAib2JqZWN0X3R5cGUiOiAiYXRobGV0ZSIsICJvd25lcl9pZCI6IDkxNjc2NjEsICJzdWJzY3JpcHRpb25faWQiOiAyMDkwMDAsICJ1cGRhdGVzIjogeyJhdXRob3JpemVkIjogImZhbHNlIn19"
+  },
+  "data-revoke": {
+    "aspect_type": "update",
+    "event_time": 1641342241,
+    "object_id": 9167661,
+    "object_type": "athlete",
+    "owner_id": 9167661,
+    "subscription_id": 209000,
+    "updates": {"authorized": "false"}
+  },
+  "data": {
+    "aspect_type": "update",
+    "event_time": 1641342172,
+    "object_id": 6726957747,
+    "object_type": "activity",
+    "owner_id": 26745312,
+    "subscription_id": 209124,
+    "updates": {"title": "Новогодняя тренировка у пруда"}
+  }
+}

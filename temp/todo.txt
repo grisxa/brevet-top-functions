@@ -1,0 +1,98 @@
+Света
+Search activities for brevet VKpjZ3wslWNwmkWfdqeT user gCGFvpnunXOiFfnjJtCIh4FDwWM2
+
+Search activities for brevet VKpjZ3wslWNwmkWfdqeT user gCGFvpnunXOiFfnjJtCIh4FDwWM2
+ERROR:root:No tracks found
+
+Search activities for brevet GQcZMSYE97BT3vRffzDF user gCGFvpnunXOiFfnjJtCIh4FDwWM2
+ERROR:root:No tracks found
+
+Search activities for brevet VKpjZ3wslWNwmkWfdqeT user gCGFvpnunXOiFfnjJtCIh4FDwWM2
+DEBUG:root:activity Плодово-Ягодный 400/5869759598 2021-08-28T05:18:58Z
+DEBUG:root:activity Утренний велозаезд/5869759476 2021-08-29T03:41:47Z
+Total track difference -143806.32518098984
+Total checkpoint difference -3405.643610767829
+Function execution took 96905 ms, finished with status code: 200
+
+Андрей
+Search activities for brevet 50wh4HwR7TdRECmfu5hj user bb8PuWH6RmXjzqFHaYQszc7y8zP2
+curl -X GET -H "Authorization: Bearer f63d5f97bfdf8e5393411066b2b1b9b5254c31d6" "https://www.strava.com/api/v3/athlete/activities?after=1593232200.0&before=1593343800.0"
+No tracks found
+
+военный
+Search activities for brevet atBA2909CZNQ3H0g13n4 user bb8PuWH6RmXjzqFHaYQszc7y8zP2
+5571323649
+Function execution took 60004 ms, finished with status: 'timeout'
+
+карельский
+Search activities for brevet GQcZMSYE97BT3vRffzDF user bb8PuWH6RmXjzqFHaYQszc7y8zP2
+5800612741
+Function execution took 60004 ms, finished with status: 'timeout'
+
+Search activities for brevet GQcZMSYE97BT3vRffzDF user bb8PuWH6RmXjzqFHaYQszc7y8zP2
+5800612741
+Total track difference -206756.42756923917
+Total checkpoint difference -5867.468560866945
+ERROR:root:Checkpoint deviation -5867.468560866945
+Function execution took 95669 ms, finished with status code: 200
+
+Search activities for brevet atBA2909CZNQ3H0g13n4 user bb8PuWH6RmXjzqFHaYQszc7y8zP
+5571323649
+Total track difference -87251.49712852528
+Total checkpoint difference -4523.593318636145
+Function execution took 79611 ms, finished with status code: 200
+
+северное открытие
+Search activities for brevet rNHqlBXD13GIby3tweld user bb8PuWH6RmXjzqFHaYQszc7y8zP2
+5110710827
+Total track difference -228519.45289049568
+ERROR:root:Track deviation -228519.45289049568
+Function execution took 1602 ms, finished with status code: 200
+
+Search activities for brevet atBA2909CZNQ3H0g13n4 user bb8PuWH6RmXjzqFHaYQszc7y8zP2
+5571323649
+Total track difference -87251.49712852528
+Total checkpoint difference -4523.593318636145
+Function execution took 80828 ms, finished with status code: 200
+
+Search activities for brevet atBA2909CZNQ3H0g13n4 user bb8PuWH6RmXjzqFHaYQszc7y8zP2
+5571323649
+Total track difference -87251.49712852528
+Total checkpoint difference -4523.593318636145
+Function execution took 77465 ms, finished with status code: 200
+
+Search activities for brevet atBA2909CZNQ3H0g13n4 user bb8PuWH6RmXjzqFHaYQszc7y8zP2
+5571323649
+Total track difference -87251.49712852528
+Total checkpoint difference -4523.593318636145
+Function execution took 76907 ms, finished with status code: 200
+
+Search activities for brevet atBA2909CZNQ3H0g13n4 user bb8PuWH6RmXjzqFHaYQszc7y8zP2
+5571323649
+Total track difference -87251.49712852528
+Total checkpoint difference -4523.593318636145
+Function execution took 75772 ms, finished with status code: 200
+
+Search activities for brevet atBA2909CZNQ3H0g13n4 user bb8PuWH6RmXjzqFHaYQszc7y8zP2
+5571323649
+Total track difference -87251.49712852528
+Total checkpoint difference -4523.593318636145
+Function execution took 70247 ms, finished with status code: 200
+
+Search activities for brevet GQcZMSYE97BT3vRffzDF user bb8PuWH6RmXjzqFHaYQszc7y8zP2
+5800612741
+Total track difference -206756.42756923917
+Total checkpoint difference -5867.468560866945
+ERROR:root:Checkpoint deviation -5867.468560866945
+Function execution took 106623 ms, finished with status code: 200
+Function execution took 106590 ms, finished with status code: 200
+Function execution took 105089 ms, finished with status code: 200
+
+Евгений Попович
+INFO:root:Search activities for brevet atBA2909CZNQ3H0g13n4 user niawOSWyV8Ws2Y0TiTGOMhrn0813
+DEBUG:root:activity Бревет "Военная 400-ка"/5572613254 2021-07-03T06:30:24Z
+INFO:root:Total track difference -82670.66685626724
+INFO:root:Total checkpoint difference -4409.545321539239
+Function execution took 29460 ms, finished with status code: 200
+Function execution took 84821 ms, finished with status code: 200
+

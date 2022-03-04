@@ -1,0 +1,174 @@
+import csv
+import functools
+import pathlib
+from itertools import accumulate
+from typing import List, Tuple
+from timeit import default_timer as timer
+import gpxpy
+import matplotlib.pyplot as plt
+import numpy as np
+import pytest
+from gpxpy import gpx
+from gpxpy.gpx import GPXTrackPoint
+from rdp import rdp
+
+from plot_a_route import geo_distance, ROUTE_SIMPLIFY_FACTOR
+from strava import (
+    cut_off_prolog,
+    cut_off_epilog,
+    TRACK_SIMPLIFY_FACTOR,
+    np_align_track_to_route,
+)
+
+
+def read_scores() -> dict:
+    file_path = pathlib.Path(__file__).parent.absolute() / "files" / "strava-tracks.csv"
+    with open(file_path, newline="", encoding="utf-8") as csv_file:
+        table = csv.reader(csv_file, delimiter=",", quotechar='"')
+        for row in table:
+            yield row
+
+
+@pytest.fixture
+def csv_file():
+    file_path = (
+        pathlib.Path(__file__).parent.absolute() / "files" / "strava-tracks-new.csv"
+    )
+    with open(file_path, "a", newline="", encoding="utf-8") as csv_file_handler:
+        yield csv.writer(
+            csv_file_handler, delimiter=",", quotechar='"', quoting=csv.QUOTE_MINIMAL
+        )
+
+
+def pytest_generate_tests(metafunc):
+    if "score" in metafunc.fixturenames:
+        metafunc.parametrize(
+            "route_name,track_name,score,route_len,track_len,match_len", read_scores()
+        )
+
+
+@pytest.fixture
+def gpx_track_data(track_name: str) -> gpx.GPX:
+    file_path = pathlib.Path(__file__).parent.absolute() / "files" / track_name
+    return gpxpy.parse(file_path.open(encoding="UTF-8"))
+
+
+@pytest.fixture
+def gpx_route_data(route_name: str) -> gpx.GPX:
+    file_path = pathlib.Path(__file__).parent.absolute() / "files" / route_name
+    return gpxpy.parse(file_path.open(encoding="UTF-8"))
+
+
+def add_distance(point_generator):
+    @functools.wraps(point_generator)
+    def wrapper_decorator(*args, **kwargs):
+        points = iter(point_generator(*args, **kwargs))
+        first_point: GPXTrackPoint = next(points)
+        start: Tuple[float, float, float, float] = (
+            first_point.latitude,
+            first_point.longitude,
+            first_point.time.timestamp(),
+            0,
+        )
+
+        return list(
+            accumulate(
+                points,
+                lambda previous, point: (
+                    point.latitude,
+                    point.longitude,
+                    point.time.timestamp(),
+                    previous[3]
+                    + geo_distance(
+                        previous[0], previous[1], point.latitude, point.longitude
+                    ),
+                ),
+                initial=start,
+            )
+        )
+
+    return wrapper_decorator
+
+
+@pytest.fixture
+@add_distance
+def gpx_track(gpx_track_data: gpx.GPX):
+    for track in gpx_track_data.tracks:
+        for segment in track.segments:
+            for point in segment.points:
+                # print(f"track {point}")
+                yield point
+
+
+@pytest.fixture
+@add_distance
+def gpx_route(gpx_route_data: gpx.GPX):
+    for track in gpx_route_data.tracks:
+        for segment in track.segments:
+            for point in segment.points:
+                # print(f"route {point}")
+                yield point
+
+
+def test_np_gpx_brevet(
+    route_name: str,
+    track_name: str,
+    score: float,
+    route_len: int,
+    track_len: int,
+    match_len: int,
+    gpx_route: List[Tuple[float, float, float]],
+    gpx_track: List[Tuple[float, float, float]],
+    csv_file,
+):
+    route = np.array(gpx_route)
+    # ROUTE_SIMPLIFY_FACTOR
+    factor = len(route)/400000
+
+    start = timer()
+    route_mask = rdp(route[:, :2], factor, algo="iter", return_mask=True)
+    end = timer()
+    print(f"route rdp time {end-start}")
+
+    assert len(route), len(route[route_mask]) == (int(route_len), int(match_len))
+
+    draft = np.array(gpx_track)
+    start = timer()
+    track = cut_off_prolog(cut_off_epilog(draft, route[-1]), route[0])
+    end = timer()
+    print(f"track cut time {end-start}")
+
+    """
+    start = timer()
+    # TRACK_SIMPLIFY_FACTOR
+    # track_mask = rdp(track[:, :3], TRACK_SIMPLIFY_FACTOR, algo="iter", return_mask=True)
+    track_mask = [True] * track.shape[0]
+    end = timer()
+    print(f"track rdp time {end-start}")
+    """
+
+    start = timer()
+    cost, reduced = np_align_track_to_route(route[route_mask], track)
+    end = timer()
+    print(f"track align time {end-start}")
+
+    """
+    csv_file.writerow(
+        [route_name, track_name, round(cost, 3)] + [
+            len(route[route_mask]), len(track[track_mask]), len(reduced)
+        ]
+    )
+    """
+
+    plt.title(track_name)
+    plt.plot(route[route_mask].T[1], route[route_mask].T[0], marker="x")
+    plt.plot(reduced.T[1], reduced.T[0], marker="o")
+    plt.show()
+
+    assert round(cost, 3) == float(score)
+    # assert cost >= len(route[route_mask]) * -70
+    assert (len(route), len(track), len(reduced)) == (
+        int(route_len),
+        int(track_len),
+        int(match_len),
+    )

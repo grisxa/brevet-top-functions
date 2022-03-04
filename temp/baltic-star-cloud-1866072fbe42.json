@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "baltic-star-cloud",
+  "private_key_id": "1866072fbe42ab034626802a71356af899571467",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDCq5/ZUvsgR/ea\nahWRB7qwoRdov7XaZ0PbJ6YrpXcmfEc5z6YE3QDBiY58/UOqjDPVpoQAVjTb/mYW\nxMJqD9oINC0YmFT2F2Q0h5BoDEftgNZEhdd1eC4jesdtmROylIe8Df9ZZo/m2j58\n3Fq/mHsofRt085RHppckLJy7lw8vEW+desE/4n84D2mypn4owyxNfCFNROMZLcdM\nGpikJ+ASbM8ijUavcLtoGj00BzcVhYs7zA7RIE39QyiyhPnj20CljFw/rj40hYyj\nRe9bO1DPV/tQ1BzqSqqX2TWjdh0612RRJtl2Y4fmuGYzzgsQ+tgv4nkJOCUE8fRc\nClAmeKL9AgMBAAECggEAC5u4WHk+SFqCRU72IkPXuhihELn92hw2S6c9nXSsejsG\n9EeRmtCi7ueI+6MOmejqXl8jl/GMDWJKLClnfnObiMmztre+uT4D164NymaRE3SP\nUl64zmRwO+ViZwKtzgRVY71h8K7Q/e8dssxhDPPGxE9Rh9POj8c7VAjk/7quSRwi\nbk+fZWgWzMgWE7fHszQxFBKuLViJM76uHoMSJ+r/xXwSrxpA4480YHnIck/bdkEN\njC3ZrXbME6P5/cz58Fi6rhU8+u6mcpVjIAzRutYq0FSeFvk2TTChFSbcqS9Sqxz4\n89Foy9c4HnXCn3j0t/Q7yQ1yLh6nZFg6Up2H7KnT8QKBgQDkOq07Vv34M2jvnN/5\nqVff86uFex9yGU+nvKaotSoRjvmkNMikX+2rfXykVEg5thh8Av6BPXlFWcNPPRBj\naYMu7OPZiLpXov1rqnLWFxZGlIv58iUnQndurK0syjeUWl/GZPjAfw4TzJEumleQ\njjKzC6xnHJzECHgMkOOHmGnSrwKBgQDaW5f1NCDHroQ55sBEXiYaz3sKZPcoZlPp\nxE3mTggLy8eHemo8Q3PeahTCRJs86CuQ2CeRjVUuNfgDREMU8zm85wrU+teC6uTG\nN3PdzwaJaTZ92/pW+NyEpTbrwrYHRq5gS2ct2Kz5Ggez+znwGeinSNB0NnGeGqJY\nR1yYMsIAEwKBgQCNzF8A9UWJxfc2mFMX/LzaKbyxjBO3gj5ZSv6I5zYh/qDgAuN+\nLROvbqHYP304TgjcU8foaFdGXUTZoGjkOxQEPa4645ZTCLNHB3mdxm5Sn8xwGKA4\nyjUGEEbwAxuREq1ayDU89DO83WZ+e+pXp+GcGG6fCcnkihZ8SDD1eB6XhQKBgCPw\nvYNDkD2tsN/i5jSaloUFL4hXdAL3TMqGYBgPMe3XHcFj2caPh6vNJBuRtUeCI2GU\n4nZnn+SaR3cqLixtmExKbxL9Mqm+xecGS5DvuXC2m5x9r6fPEGTY2MBXbSSncp4w\n6wu1xUq/CROLv06QxSV7q6vlJjBSy/Ph0xDOEfZ3AoGAHPUNFktf1Z/F9alK9LPO\n7YNNzoFYAPPl9Qdkc6SAj29FCYgiyGZjtj50OgV7yeeLMdZeGbgpCiJ5HLFC3T8F\n9IGORG4OqOwBL0jNhBpNQUkOdo35sTeODORppuzHynepELiKAGzVXXlzj+CiJGFB\nJ4jXUGk2Uqm30+vmRVlPOqk=\n-----END PRIVATE KEY-----\n",
+  "client_email": "baltic-star-cloud@appspot.gserviceaccount.com",
+  "client_id": "107669855671726662769",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/baltic-star-cloud%40appspot.gserviceaccount.com"
+}

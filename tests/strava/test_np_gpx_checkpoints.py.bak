@@ -1,0 +1,202 @@
+import csv
+import functools
+import pathlib
+from datetime import datetime
+from itertools import accumulate
+from typing import List, Tuple
+from timeit import default_timer as timer
+import gpxpy
+import matplotlib.pyplot as plt
+import numpy as np
+import pytest
+from gpxpy import gpx
+from gpxpy.gpx import GPXTrackPoint
+from rdp import rdp
+
+from plot_a_route import (
+    geo_distance,
+    RoutePoint,
+    attach_labels,
+    CheckPoint,
+)
+from strava import TRACK_SIMPLIFY_FACTOR
+from strava.math import np_align_track_to_route, np_geo_distance_track
+from strava.simplify import clear_stops
+from strava.simplify import cut_off_prolog, cut_off_epilog
+
+
+def read_scores() -> dict:
+    file_path = (
+        pathlib.Path(__file__).parent.absolute() / "files" / "strava-checkpoints.csv"
+    )
+    with open(file_path, newline="", encoding="utf-8") as csv_file:
+        table = csv.reader(csv_file, delimiter=",", quotechar='"')
+        for row in table:
+            yield *row[0:3], row[3:6], row[6], row[7:15]
+
+
+@pytest.fixture
+def csv_file():
+    file_path = (
+        pathlib.Path(__file__).parent.absolute()
+        / "files"
+        / "strava-checkpoints-new.csv"
+    )
+    with open(file_path, "a", newline="", encoding="utf-8") as csv_file_handler:
+        yield csv.writer(
+            csv_file_handler, delimiter=",", quotechar='"', quoting=csv.QUOTE_MINIMAL
+        )
+
+
+def pytest_generate_tests(metafunc):
+    if "score" in metafunc.fixturenames:
+        metafunc.parametrize("route_name,track_name,score,length,diff,time", read_scores())
+
+
+@pytest.fixture
+def gpx_track_data(track_name: str) -> gpx.GPX:
+    file_path = pathlib.Path(__file__).parent.absolute() / "files" / track_name
+    return gpxpy.parse(file_path.open(encoding="UTF-8"))
+
+
+@pytest.fixture
+def gpx_route_data(route_name: str) -> gpx.GPX:
+    file_path = pathlib.Path(__file__).parent.absolute() / "files" / route_name
+    return gpxpy.parse(file_path.open(encoding="UTF-8"))
+
+
+def add_distance(point_generator):
+    @functools.wraps(point_generator)
+    def wrapper_decorator(*args, **kwargs):
+        points = iter(point_generator(*args, **kwargs))
+        first_point: GPXTrackPoint = next(points)
+        start: Tuple[float, float, float, float] = (
+            first_point.latitude,
+            first_point.longitude,
+            first_point.time.timestamp(),
+            0,
+        )
+
+        return list(
+            accumulate(
+                points,
+                lambda previous, point: (
+                    point.latitude,
+                    point.longitude,
+                    point.time.timestamp(),
+                    previous[3]
+                    + geo_distance(
+                        previous[0], previous[1], point.latitude, point.longitude
+                    ),
+                ),
+                initial=start,
+            )
+        )
+
+    return wrapper_decorator
+
+
+@pytest.fixture
+@add_distance
+def gpx_track(gpx_track_data: gpx.GPX):
+    for track in gpx_track_data.tracks:
+        for segment in track.segments:
+            for point in segment.points:
+                # print(f"track {point}")
+                yield point
+
+
+@pytest.fixture
+@add_distance
+def gpx_route(gpx_route_data: gpx.GPX):
+    for track in gpx_route_data.tracks:
+        for segment in track.segments:
+            for point in segment.points:
+                # print(f"route {point}")
+                yield point
+
+
+@pytest.fixture
+def get_route_points(gpx_route: List[Tuple[float, float, float, float]]):
+    return [
+        RoutePoint(lat=point[0], lng=point[1], distance=point[3]) for point in gpx_route
+    ]
+
+
+@pytest.fixture
+def gpx_waypoints(gpx_route_data: gpx.GPX) -> List[Tuple[float, float, str]]:
+    return [(wp.latitude, wp.longitude, wp.name) for wp in gpx_route_data.waypoints]
+
+
+@pytest.fixture
+def get_checkpoints(
+    get_route_points: List[RoutePoint], gpx_waypoints: List[Tuple[float, float, str]]
+) -> List[Tuple[float, float, float, float]]:
+    checkpoints = [CheckPoint(lat=wp[0], lng=wp[1], name=wp[2]) for wp in gpx_waypoints]
+
+    for point in get_route_points:
+        attach_labels(checkpoints, point)
+
+    double: List[Tuple[float, float, float, float]] = [
+        (cp.lat, cp.lng, 0.0, cp.distance * 1000) for cp in checkpoints for _ in (0, 1)
+    ]
+    double.pop()
+    double.pop(0)
+    return double
+
+
+def test_gpx_checkpoints(
+    route_name: str,
+    track_name: str,
+    score: float,
+    length: List[int],
+    diff: float,
+    time: List[float],
+    gpx_track: List[Tuple[float, float, float, float]],
+    get_checkpoints: List[Tuple[float, float, float, float]],
+    csv_file,
+):
+    checkpoints = np.array(get_checkpoints)
+
+    start = timer()
+    draft = np.array(gpx_track)
+    track = clear_stops(
+        cut_off_prolog(cut_off_epilog(draft, get_checkpoints[-1]), get_checkpoints[0]),
+        get_checkpoints,
+    )
+    track_mask = rdp(track[:, :3], TRACK_SIMPLIFY_FACTOR, algo="iter", return_mask=True)
+    end = timer()
+    print(f"{track_name} track cut time {end-start}")
+
+    start = timer()
+    cost, reduced = np_align_track_to_route(checkpoints, track[track_mask])
+    end = timer()
+    print(f"{track_name} track align time {end-start}")
+
+    cost_reviewed = round(np_geo_distance_track(checkpoints, reduced, 0), 3)
+
+    csv_file.writerow(
+        [route_name, track_name, round(cost, 3)] + [
+            len(checkpoints), len(track), len(reduced)
+        ] + reduced.T[2].tolist()
+    )
+
+    for i, cp in enumerate(reduced):
+        # test for NaN
+        if cp[3] == cp[3]:
+            pass
+            print(
+                f"control {i}. {cp[0:2]} {cp[3]} {datetime.fromtimestamp(cp[2])} / {cp[2]}"
+            )
+
+    plt.plot(checkpoints.T[1], checkpoints.T[0], marker="x")
+    plt.plot(reduced.T[1], reduced.T[0], marker="o")
+    plt.plot(track[track_mask].T[1], track[track_mask].T[0], marker=".")
+    # plt.show()
+
+    assert round(cost, 3) == float(score)
+    assert [len(checkpoints), len(track), len(reduced)] == [
+        int(ln) for ln in length
+    ]
+    assert time == [str(cp[2]) for cp in reduced]
+    assert cost_reviewed == float(diff)

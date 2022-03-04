@@ -1,0 +1,209 @@
+{
+  "context": {
+    "eventId": "cb8d0383-9a90-49b8-aa69-eac1a48a7cf7-0",
+    "timestamp": "2021-09-30T01:05:30.638223Z",
+    "eventType": "providers/cloud.firestore/eventTypes/document.update",
+    "resource": "projects/baltic-star-cloud/databases/(default)/documents/brevets/bGJa6nII0SDo521Imv6M"
+  },
+  "data": {
+    "oldValue": {
+      "createTime": "2020-06-12T02:36:02.345940Z",
+      "fields": {
+        "checkpoints": {
+          "arrayValue": {
+            "values": [
+              {
+                "mapValue": {
+                  "fields": {
+                    "name": {
+                      "stringValue": "test"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "cp": {
+          "arrayValue": {
+            "values": [
+              {
+                "mapValue": {
+                  "fields": {
+                    "distance": {
+                      "integerValue": "0"
+                    },
+                    "name": {
+                      "stringValue": "Старт"
+                    },
+                    "qr": {
+                      "booleanValue": true
+                    },
+                    "uid": {
+                      "stringValue": "108oFCZ0AqFFP1gjI733"
+                    }
+                  }
+                }
+              },
+              {
+                "mapValue": {
+                  "fields": {
+                    "distance": {
+                      "integerValue": "51"
+                    },
+                    "name": {
+                      "stringValue": "КП1: Первый"
+                    },
+                    "sleep": {
+                      "booleanValue": true
+                    },
+                    "uid": {
+                      "stringValue": "pKCtWDfgAZphZ04dxDk7"
+                    }
+                  }
+                }
+              },
+              {
+                "mapValue": {
+                  "fields": {
+                    "distance": {
+                      "integerValue": "100"
+                    },
+                    "name": {
+                      "stringValue": "Финиш"
+                    },
+                    "uid": {
+                      "stringValue": "YB0ykSRJf5CxxiI1YN9p"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "endDate": {
+          "timestampValue": "2048-12-31T20:59:59Z"
+        },
+        "length": {
+          "integerValue": "6"
+        },
+        "mapUrl": {
+          "stringValue": "https://www.plotaroute.com/route/1577309 "
+        },
+        "name": {
+          "stringValue": "Проверка"
+        },
+        "startDate": {
+          "timestampValue": "2020-01-02T09:02:00Z"
+        },
+        "uid": {
+          "stringValue": "bGJa6nII0SDo521Imv6M"
+        }
+      },
+      "name": "projects/baltic-star-cloud/databases/(default)/documents/brevets/bGJa6nII0SDo521Imv6M",
+      "updateTime": "2021-09-27T12:01:58.143663Z"
+    },
+    "updateMask": {
+      "fieldPaths": [
+        "mapUrl"
+      ]
+    },
+    "value": {
+      "createTime": "2020-06-12T02:36:02.345940Z",
+      "fields": {
+        "checkpoints": {
+          "arrayValue": {
+            "values": [
+              {
+                "mapValue": {
+                  "fields": {
+                    "name": {
+                      "stringValue": "test"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "cp": {
+          "arrayValue": {
+            "values": [
+              {
+                "mapValue": {
+                  "fields": {
+                    "distance": {
+                      "integerValue": "0"
+                    },
+                    "name": {
+                      "stringValue": "Старт"
+                    },
+                    "qr": {
+                      "booleanValue": true
+                    },
+                    "uid": {
+                      "stringValue": "108oFCZ0AqFFP1gjI733"
+                    }
+                  }
+                }
+              },
+              {
+                "mapValue": {
+                  "fields": {
+                    "distance": {
+                      "integerValue": "51"
+                    },
+                    "name": {
+                      "stringValue": "КП1: Первый"
+                    },
+                    "sleep": {
+                      "booleanValue": true
+                    },
+                    "uid": {
+                      "stringValue": "pKCtWDfgAZphZ04dxDk7"
+                    }
+                  }
+                }
+              },
+              {
+                "mapValue": {
+                  "fields": {
+                    "distance": {
+                      "integerValue": "100"
+                    },
+                    "name": {
+                      "stringValue": "Финиш"
+                    },
+                    "uid": {
+                      "stringValue": "YB0ykSRJf5CxxiI1YN9p"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "endDate": {
+          "timestampValue": "2048-12-31T20:59:59Z"
+        },
+        "length": {
+          "integerValue": "6"
+        },
+        "mapUrl": {
+          "stringValue": "https://www.plotaroute.com/route/1577309"
+        },
+        "name": {
+          "stringValue": "Проверка"
+        },
+        "startDate": {
+          "timestampValue": "2020-01-02T09:02:00Z"
+        },
+        "uid": {
+          "stringValue": "bGJa6nII0SDo521Imv6M"
+        }
+      },
+      "name": "projects/baltic-star-cloud/databases/(default)/documents/brevets/bGJa6nII0SDo521Imv6M",
+      "updateTime": "2021-09-30T01:05:30.638223Z"
+    }
+  }
+}
