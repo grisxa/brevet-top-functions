@@ -1,4 +1,5 @@
 import logging
+import re
 from datetime import datetime
 from typing import List
 
@@ -12,7 +13,6 @@ log_client = google.cloud.logging.Client()
 log_client.get_default_handler()
 # log_client.setup_logging(log_level=logging.DEBUG)
 logging.basicConfig(level=logging.DEBUG)
-
 
 firebase_admin.initialize_app()
 db_client = google.cloud.firestore.Client()
@@ -34,16 +34,16 @@ def save_results(request: Request):
     doc_uid: str = data.get("brevetUid")
     logging.info(f"Saving results of the brevet {doc_uid}")
 
-    # retrieve document
-    brevet_doc = db_client.document(f"brevets/{doc_uid}")
+    try:
+        brevet_doc = resolve_document(doc_uid)
+    except ValueError as error:
+        return json.dumps({"message": str(error)}), 404
+
     brevet_dict = brevet_doc.get().to_dict()
 
     try:
         checkpoints: List[dict] = [
-            cp.to_dict()
-            for cp in db_client.document(f"brevets/{doc_uid}")
-            .collection("checkpoints")
-            .get()
+            cp.to_dict() for cp in brevet_doc.collection("checkpoints").get()
         ]
         checkpoints.sort(key=lambda x: x.get("distance", 0))
 
@@ -63,7 +63,8 @@ def save_results(request: Request):
                     }
                 )
                 for doc in (
-                    db_client.document(f"brevets/{doc_uid}/checkpoints/{cp['uid']}")
+                    brevet_doc.collection("checkpoints")
+                    .document(cp["uid"])
                     .collection("riders")
                     .get()
                 ):
@@ -92,3 +93,18 @@ def save_results(request: Request):
         return json.dumps({"message": str(error)}), 500
 
     return json.dumps({"data": f"/json/brevet/{doc_uid}"}), 200
+
+
+def resolve_document(doc_uid: str):
+    if re.match("^\\d+$", doc_uid):
+        logging.info(f"Looking for alias of {doc_uid}")
+        alias_doc = db_client.document(f"aliases/{doc_uid}")
+        alias_dict = alias_doc.get().to_dict()
+        if not alias_dict:
+            raise ValueError(f"Alias {doc_uid} not found")
+
+        # retrieve reference
+        return alias_dict.get("brevet_uid")
+    else:
+        # retrieve document
+        return db_client.document(f"brevets/{doc_uid}")
