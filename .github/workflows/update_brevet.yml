@@ -1,0 +1,48 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Brevet update trigger
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+    paths: update_brevet/**
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  deploy:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+
+      - id: auth
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          workload_identity_provider: 'projects/289323711544/locations/global/workloadIdentityPools/baltic-star-pool/providers/github-actions-provider'
+          service_account: 'github-deploy-functions@baltic-star-cloud.iam.gserviceaccount.com'
+
+      - id: deploy
+        name: Deploy brevet update trigger to the cloud
+        uses: google-github-actions/deploy-cloud-functions@v1.0.1
+        with:
+          name: 'updateBrevet'
+          runtime: 'python39'
+          source_dir: update_brevet
+          entry_point: update_brevet
+          timeout: 180
+          event_trigger_type: "providers/cloud.firestore/eventTypes/document.update"
+          event_trigger_resource: "projects/baltic-star-cloud/databases/(default)/documents/brevets/{brevetUid}"
