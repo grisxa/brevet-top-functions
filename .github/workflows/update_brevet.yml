@@ -35,6 +35,10 @@ jobs:
           workload_identity_provider: 'projects/289323711544/locations/global/workloadIdentityPools/baltic-star-pool/providers/github-actions-provider'
           service_account: 'github-deploy-functions@baltic-star-cloud.iam.gserviceaccount.com'
 
+      - id: copy
+        name: Copy supplementary utils
+        run: cp -a gcp_utils/ numpy_utils/ plot_a_route/ update_brevet/
+
       - id: deploy
         name: Deploy brevet update trigger to the cloud
         uses: google-github-actions/deploy-cloud-functions@v1.0.1
