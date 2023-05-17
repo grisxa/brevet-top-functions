@@ -1,0 +1,2 @@
+class RouteNotFound(Exception):
+    pass
