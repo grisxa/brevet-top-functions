@@ -87,7 +87,7 @@ def print_checkpoint(request: Request):
     c.setFontSize(20)
     start_date: datetime = checkpoint_dict.get("brevet", {}).get("startDate")
     if start_date:
-        c.drawString(80, 560, start_date.strftime("%d.%m.%y"))
+        c.drawString(80, 560, start_date.strftime("%d.%m.%Y"))
 
     c.setFontSize(30)
     checkpoint_name = checkpoint_dict.get("displayName", "")
@@ -100,7 +100,7 @@ def print_checkpoint(request: Request):
     end_date: datetime = checkpoint_dict.get("brevet", {}).get("endDate")
     if end_date:
         c.drawString(325, 80, "до")
-        c.drawString(360, 80, (end_date + timedelta(days=1)).strftime("%d.%m.%y"))
+        c.drawString(360, 80, (end_date + timedelta(days=1)).strftime("%d.%m.%Y"))
 
     # Draw a QR code
     url = f"https://brevet.top/c/{checkpoint_uid}"
