@@ -129,6 +129,6 @@ def print_checkpoint(request: Request):
     return send_file(
         BytesIO(pdf_content),
         mimetype="application/pdf",
-        attachment_filename=file_name,
+        download_name=file_name,
         as_attachment=False,
     )
