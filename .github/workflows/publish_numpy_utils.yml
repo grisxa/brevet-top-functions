@@ -32,20 +32,42 @@ jobs:
           python-version: "3.x"
 
       - name: Install pypa/build
-        run: python3 -m pip install build hatch keyring keyrings.google-artifactregistry-auth --user
+        run: python3 -m pip install build hatch twine keyring keyrings.google-artifactregistry-auth --user
 
       - name: Build a binary wheel and a source tarball
         run: cd brevet_top_numpy_utils && python3 -m hatch build
 
+      - id: auth_key
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          credentials_json: ${{ secrets.SERVICE_ACCOUNT_KEY }}
+
       - id: auth
+        if: false
         name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v1'
         with:
           workload_identity_provider: 'projects/289323711544/locations/global/workloadIdentityPools/baltic-star-pool/providers/github-actions-provider'
           service_account: 'github-deploy-functions@baltic-star-cloud.iam.gserviceaccount.com'
 
-      - name: Publish distribution to the Google cloud repo
-        uses: pypa/gh-action-pypi-publish@release/v1
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v1'
         with:
-          repository-url: ${{ vars.GCLOUD_REPO }}
-          verbose: true
+          version: '>= 363.0.0'
+
+      - name: Extract credentials
+        id: credentials
+        run: |
+          gcloud artifacts print-settings python \
+            --project=${{ vars.GCLOUD_PROJECT }} \
+            --repository=${{ vars.GCLOUD_REPO_NAME }} \
+            --location=us-central1 \
+            --json-key="$GOOGLE_APPLICATION_CREDENTIALS" | head -n -5 > ~/.pypirc
+
+      - name: Publish to Google Cloud Artifact Registry
+        run: |
+          python3 -m twine upload \
+            --verbose \
+            -r ${{ vars.GCLOUD_REPO_NAME }} \
+            brevet_top_numpy_utils/dist/*
