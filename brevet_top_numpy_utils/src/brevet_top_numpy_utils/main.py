@@ -1,7 +1,7 @@
 import numpy as np
 from numpy import radians, arccos, sin, cos
 
-from numpy_utils import FloatArray
+from . import FloatArray
 
 DISTANCE_FACTOR = np.float64(0.001)
 EARTH_RADIUS = np.float64(6371e3)
@@ -18,7 +18,5 @@ def np_geo_distance(
     distance_shift = abs(track.T[3] - point[3]) * factor
     return distance_shift + EARTH_RADIUS * arccos(
         sin(point_latitude) * sin(latitude_radians)
-        + cos(point_latitude)
-        * cos(latitude_radians)
-        * cos(longitude_radians - point_longitude)
+        + cos(point_latitude) * cos(latitude_radians) * cos(longitude_radians - point_longitude)
     )
