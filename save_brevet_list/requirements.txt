@@ -1,0 +1,6 @@
+--extra-index-url https://us-central1-python.pkg.dev/baltic-star-cloud/brevet-top-python-repo/simple/
+firebase-admin==5.2.0
+google-cloud-firestore==2.3.4
+google-cloud-logging==2.6.0
+flask-cors==3.0.10
+brevet-top-gcp-utils==0.1.0
