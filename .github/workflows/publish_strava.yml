@@ -1,0 +1,82 @@
+name: brevet-top-strava package publisher
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+    paths: brevet_top_strava/**
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11.x"
+
+      - id: auth_key
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          credentials_json: ${{ secrets.SERVICE_ACCOUNT_KEY }}
+
+      - id: auth
+        if: false
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          workload_identity_provider: 'projects/289323711544/locations/global/workloadIdentityPools/baltic-star-pool/providers/github-actions-provider'
+          service_account: 'github-deploy-functions@baltic-star-cloud.iam.gserviceaccount.com'
+
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v1'
+        with:
+          version: '>= 363.0.0'
+
+      - name: 'Extract credentials'
+        id: credentials
+        run: |
+          config=$(gcloud artifacts print-settings python \
+            --project=${{ vars.GCLOUD_PROJECT }} \
+            --repository=${{ vars.GCLOUD_REPO_NAME }} \
+            --location=us-central1 \
+            --json-key="$GOOGLE_APPLICATION_CREDENTIALS")
+          echo "$config"| head -n -5 > ~/.pypirc
+          mkdir -p ~/.pip
+          echo "$config" | tail -n +11 > ~/.pip/pip.conf
+
+      - name: 'Install build tools'
+        run: python3 -m pip install build pytest pytest-coverage matplotlib hatch twine --user
+
+      - name: 'Build a binary wheel and a source tarball'
+        env:
+          PIP_CONFIG_FILE: ~/.pip/pip.conf
+        run: |
+          cd brevet_top_strava
+          python -m hatch build
+          pip install ./dist/*.tar.gz
+          python -m pytest
+
+      - name: 'Publish to the Google Cloud Artifact Registry'
+        run: |
+          python3 -m twine upload \
+            --verbose \
+            -r ${{ vars.GCLOUD_REPO_NAME }} \
+            brevet_top_strava/dist/*
