@@ -8,10 +8,10 @@ import numpy as np
 import requests
 from rdp import rdp
 
-from numpy_utils import FloatArray, np_geo_distance
-from plot_a_route.check_point import CheckPoint
-from plot_a_route.exceptions import RouteNotFound
-from plot_a_route.route_point import RoutePoint
+from brevet_top_numpy_utils import FloatArray, np_geo_distance
+from .check_point import CheckPoint
+from .exceptions import RouteNotFound
+from .route_point import RoutePoint
 
 ROUTE_PREFIX: str = "https://www.plotaroute.com/route/"
 API_PREFIX: str = "https://www.plotaroute.com/get_route.asp"

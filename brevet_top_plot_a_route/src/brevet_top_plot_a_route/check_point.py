@@ -1,6 +1,6 @@
 from typing import Optional
 
-from plot_a_route.route_point import RoutePoint
+from .route_point import RoutePoint
 
 
 class CheckPoint(RoutePoint):
