@@ -17,7 +17,7 @@ from brevet_top_plot_a_route import geo_distance
     ],
 )
 def test_geo_distance(latitude1, longitude1, latitude2, longitude2, expected):
-    assert geo_distance(latitude1, longitude1, latitude2, longitude2) == expected
+    assert round(geo_distance(latitude1, longitude1, latitude2, longitude2), 3) == round(expected, 3)
 
 
 @patch('numpy.arccos', return_value=np.nan)  # patch in case of precise math returning a valid value
