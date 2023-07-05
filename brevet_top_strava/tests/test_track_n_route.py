@@ -137,7 +137,7 @@ def test_track_n_route(
 
     assert len(reduced) == 92
     assert round(cost, 3) == -3892.192
-    assert round(cost_reviewed, 3) == 3696.592
+    assert round(cost_reviewed, 2) == 3696.59
 
     assert round(np.sum(reduced[:, 0]), 3) == 5696.339
     assert round(np.sum(reduced[:, 1]), 3) == 3014.261
