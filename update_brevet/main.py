@@ -8,8 +8,8 @@ import google.cloud.firestore
 import google.cloud.logging
 from google.cloud.functions.context import Context
 
-from gcp_utils import route_point_to_firestore
-from plot_a_route import get_route_info, ROUTE_PREFIX
+from brevet_top_gcp_utils import route_point_to_firestore
+from brevet_top_plot_a_route import get_route_info, ROUTE_PREFIX
 
 log_client = google.cloud.logging.Client()
 log_client.get_default_handler()

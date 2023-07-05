@@ -41,6 +41,7 @@ jobs:
         with:
           name: 'updateBrevet'
           runtime: 'python39'
+          source_dir: update_brevet
           entry_point: update_brevet
           timeout: 180
           event_trigger_type: "providers/cloud.firestore/eventTypes/document.update"
