@@ -1,1 +1,1 @@
-from .main import update_brevet
+from .main import update_brevet  # noqa: F401

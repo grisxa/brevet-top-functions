@@ -28,12 +28,51 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11.x"
+
+      - id: auth_key
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          credentials_json: ${{ secrets.SERVICE_ACCOUNT_KEY }}
+
       - id: auth
+        if: false
         name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v1'
         with:
           workload_identity_provider: 'projects/289323711544/locations/global/workloadIdentityPools/baltic-star-pool/providers/github-actions-provider'
           service_account: 'github-deploy-functions@baltic-star-cloud.iam.gserviceaccount.com'
+
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v1'
+        with:
+          version: '>= 363.0.0'
+
+      - name: 'Extract credentials'
+        id: credentials
+        run: |
+          config=$(gcloud artifacts print-settings python \
+            --project=${{ vars.GCLOUD_PROJECT }} \
+            --repository=${{ vars.GCLOUD_REPO_NAME }} \
+            --location=us-central1 \
+            --json-key="$GOOGLE_APPLICATION_CREDENTIALS")
+          echo "$config"| head -n -5 > ~/.pypirc
+          mkdir -p ~/.pip
+          echo "$config" | tail -n +11 > ~/.pip/pip.conf
+
+      - name: 'Install test tools and dependencies'
+        run: |
+          python3 -m pip install pytest pytest-coverage --user
+          python3 -m pip install -r update_brevet/requirements.txt
+
+      - name: 'Run the tests'
+        env:
+          PYTHONPATH: .
+        run: python -m pytest update_brevet/tests
 
       - id: deploy
         name: Deploy brevet update trigger to the cloud

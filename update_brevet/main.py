@@ -81,7 +81,9 @@ def get_limit_hours(distance: int) -> float:
     elif distance <= 600:
         return distance / 15
     elif distance <= 1000:
-        return distance / 11.428
+        return (distance - 600) / 11.428 + 40
+    # TODO: update the default value
+    return (distance - 600) / 11.428 + 40
 
 
 def update_route(doc_path: str, data: dict):
