@@ -8,6 +8,7 @@ import google.cloud.firestore
 import google.cloud.logging
 from flask import Request, json
 from flask_cors import cross_origin
+from google.api_core.datetime_helpers import DatetimeWithNanoseconds
 
 log_client = google.cloud.logging.Client()
 log_client.get_default_handler()
@@ -81,9 +82,11 @@ def save_results(request: Request):
                         logging.error(
                             f"Empty time of rider {rider_uid} {checkin['name']}"
                         )
-                    times: List[datetime] = [
-                        t for t in checkin["time"] if t.microsecond
-                    ] + [t for t in checkin["time"] if not t.microsecond]
+                    times: List[datetime] = (
+                        [t for t in checkin["time"] if is_manual_checkin(t)]
+                        + [t for t in checkin["time"] if is_self_checkin(t)]
+                        + [t for t in checkin["time"] if is_strava_checkin(t)]
+                    )
                     if len(times) < 1:
                         continue
                     brevet_dict["results"][rider_uid]["checkins"][i] = times[0]
@@ -108,3 +111,18 @@ def resolve_document(doc_uid: str):
     else:
         # retrieve document
         return db_client.document(f"brevets/{doc_uid}")
+
+
+def is_manual_checkin(checkin: DatetimeWithNanoseconds) -> bool:
+    """The time entered manually by a volunteer"""
+    return checkin.second == 0 and checkin.microsecond == 0 and checkin.nanosecond == 0
+
+
+def is_strava_checkin(checkin: DatetimeWithNanoseconds) -> bool:
+    """The time imported from Strava"""
+    return checkin.microsecond == 0 and checkin.nanosecond == 0
+
+
+def is_self_checkin(checkin: DatetimeWithNanoseconds) -> bool:
+    """The time entered by the rider"""
+    return checkin.microsecond != 0 or checkin.nanosecond != 0
