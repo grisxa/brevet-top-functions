@@ -44,3 +44,4 @@ jobs:
           source_dir: json_export
           entry_point: json_export
           timeout: 180
+          memory_mb: 512
