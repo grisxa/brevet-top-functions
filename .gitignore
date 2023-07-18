@@ -10,7 +10,7 @@ __pycache__/
 .Python
 build/
 develop-eggs/
-dist/
+**/dist/
 downloads/
 eggs/
 .eggs/
@@ -38,10 +38,10 @@ pip-log.txt
 pip-delete-this-directory.txt
 
 # Unit test / coverage reports
-htmlcov/
+**/htmlcov/
 .tox/
 .nox/
-.coverage
+**/.coverage
 .coveragerc
 .coverage.*
 .cache
@@ -50,7 +50,7 @@ coverage.xml
 *.cover
 *.py,cover
 .hypothesis/
-.*_cache/
+**/.*_cache/
 
 # Translations
 *.mo
