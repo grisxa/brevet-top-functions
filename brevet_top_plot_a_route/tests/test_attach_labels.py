@@ -1,7 +1,7 @@
 import pytest
 
-from brevet_top_plot_a_route import attach_labels
 from brevet_top_plot_a_route.check_point import CheckPoint
+from brevet_top_plot_a_route.route import Route
 
 
 @pytest.fixture()
@@ -13,16 +13,22 @@ def labels():
 
 
 def test_attach_labels_empty():
+    # setup
     labels = []
     expected = []
+    route = Route()
 
-    attach_labels(labels, [(60.016743, 30.26922, 0.0, 0.0)])
+    # verification
+    route._attach_labels(labels, [(60.016743, 30.26922, 0.0, 0.0)])
     assert labels == expected
 
 
 def test_attach_labels(labels):
+    # setup
+    route = Route()
+
     # action
-    attach_labels(
+    route._attach_labels(
         labels,
         [
             (60.016743, 30.26922, 0.0, 1234.56),
@@ -32,4 +38,4 @@ def test_attach_labels(labels):
     )
 
     # verification
-    assert [label.distance for label in labels] == [3, 6]
+    assert [label.distance for label in labels] == [3456.78, 5678.9]

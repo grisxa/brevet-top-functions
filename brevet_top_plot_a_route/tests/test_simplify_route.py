@@ -2,7 +2,8 @@ from typing import List
 
 import pytest
 
-from brevet_top_plot_a_route import simplify_route, RoutePoint
+from brevet_top_plot_a_route.utils import simplify_route
+from brevet_top_plot_a_route.route_point import RoutePoint
 
 
 @pytest.mark.parametrize(

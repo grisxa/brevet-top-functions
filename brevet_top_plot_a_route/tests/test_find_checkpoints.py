@@ -3,32 +3,41 @@ from unittest.mock import patch
 
 import pytest
 
-from brevet_top_plot_a_route import find_checkpoints, RoutePoint, CheckPoint
+from brevet_top_plot_a_route.check_point import CheckPoint
+from brevet_top_plot_a_route.route import Route
+from brevet_top_plot_a_route.route_point import RoutePoint
 
 
 @pytest.fixture()
-def data_good():
-    return {"RouteData": '[{"lat": 1, "lng": 2}]'}
+def mock_route():
+    return Route()
 
 
-def test_find_checkpoints_empty():
+def test_find_checkpoints_empty(mock_route):
+    # action
+    with pytest.raises(ValueError) as error:
+        mock_route.find_checkpoints()
+
     # verification
-    assert find_checkpoints([]) == []
+    assert "Empty route" in str(error)
 
 
-def test_find_checkpoints_single():
+def test_find_checkpoints_single(mock_route):
     # setup
-    source: List[RoutePoint] = [RoutePoint(lat=1, lng=2)]
+    mock_route.track = [RoutePoint(lat=1, lng=2)]
     expected: List[CheckPoint] = [CheckPoint(lat=1, lng=2, name="Start")]
 
+    # action
+    result = mock_route.find_checkpoints()
+
     # verification
-    assert find_checkpoints(source) == expected
+    assert str(result) == str(expected)
 
 
-@patch("brevet_top_plot_a_route.find_labels", return_value=[])
-def test_find_checkpoints_many(mock_find_labels):
+@patch("brevet_top_plot_a_route.check_point.CheckPoint.find_labels", return_value=[])
+def test_find_checkpoints_many(mock_find_labels, mock_route):
     # setup
-    source: List[RoutePoint] = [
+    mock_route.track = [
         RoutePoint(lat=1, lng=2),
         RoutePoint(lat=3, lng=4, dir="CP1", distance=1234567),
         RoutePoint(lat=5, lng=6),
@@ -38,13 +47,13 @@ def test_find_checkpoints_many(mock_find_labels):
     ]
     expected: List[CheckPoint] = [
         CheckPoint(lat=1, lng=2, name="Start"),
-        CheckPoint(lat=3, lng=4, name="CP1", distance=1235),
-        CheckPoint(lat=7, lng=8, name="CP2", distance=2346),
+        CheckPoint(lat=3, lng=4, name="CP1", distance=1234567),
+        CheckPoint(lat=7, lng=8, name="CP2", distance=2345678),
     ]
 
     # action
-    result = find_checkpoints(source)
+    result = mock_route.find_checkpoints()
 
     # verification
-    assert result == expected
+    assert str(result) == str(expected)
     mock_find_labels.assert_called_once()

@@ -3,7 +3,7 @@ from unittest.mock import patch
 import numpy as np
 import pytest
 
-from brevet_top_plot_a_route import geo_distance
+from brevet_top_plot_a_route.utils import geo_distance
 
 
 @pytest.mark.parametrize(

@@ -1,7 +1,7 @@
 import pytest
 
-from brevet_top_plot_a_route import find_labels
 from brevet_top_plot_a_route.check_point import CheckPoint
+from brevet_top_plot_a_route.route_point import PlotARoutePoint
 
 
 @pytest.fixture()
@@ -30,8 +30,8 @@ def point():
 
 def test_find_labels(point):
     # setup
-    route_point = CheckPoint(**point)
+    route_point = PlotARoutePoint(**point)
     expected = [CheckPoint(lat=60.0164379, lng=30.2789855, name="CP2: shop")]
 
     # action/verification
-    assert find_labels(route_point) == expected
+    assert str(CheckPoint.from_plot_a_route(route_point).find_labels()) == str(expected)

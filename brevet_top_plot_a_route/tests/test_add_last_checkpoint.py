@@ -1,64 +1,50 @@
-from brevet_top_plot_a_route import add_last_checkpoint, RoutePoint, CheckPoint
+from brevet_top_plot_a_route.check_point import CheckPoint
+from brevet_top_plot_a_route.route import Route
+from brevet_top_plot_a_route.route_point import RoutePoint
+
+
+def test_add_last_checkpoint_no_track():
+    # setup
+    route = Route()
+    route._add_last_checkpoint()
+
+    # verification
+    assert route.checkpoints is None
+
+
+def test_add_last_checkpoint_no_checkpoints():
+    # setup
+    route = Route(track=[RoutePoint(lat=40.78, lng=43.86, distance=0)])
+    route._add_last_checkpoint()
+
+    # verification
+    assert route.checkpoints is None
 
 
 def test_add_last_checkpoint_empty():
-    checkpoints = []
+    # setup
+    route = Route(checkpoints=[], track=[RoutePoint(lat=40.78, lng=43.86, distance=0)])
+    route._add_last_checkpoint()
 
-    add_last_checkpoint(checkpoints)
-
-    assert checkpoints == []
-
-
-def test_add_last_checkpoint_single_near():
-    checkpoints = [CheckPoint(lat=60, lng=30, distance=0)]
-
-    add_last_checkpoint(checkpoints)
-
-    assert len(checkpoints) == 1
+    # verification
+    assert route.checkpoints == []
 
 
-def test_add_last_checkpoint_single_far():
-    checkpoints = [CheckPoint(lat=60, lng=30, distance=0)]
-    expected = [
-        CheckPoint(lat=60, lng=30, distance=0),
-        CheckPoint(lat=61, lng=31, distance=2, name="End"),
-    ]
+def test_add_last_checkpoint_close():
+    # setup
+    checkpoint = CheckPoint(lat=60, lng=30, distance=2000, name="test")
+    route = Route(checkpoints=[checkpoint], track=[RoutePoint(lat=40.78, lng=43.86, distance=1800)])
+    route._add_last_checkpoint()
 
-    add_last_checkpoint(checkpoints, RoutePoint(lat=61, lng=31, distance=2000))
-
-    assert checkpoints == expected
+    # verification
+    assert str(route.checkpoints) == "[<CheckPoint lat=60 lng=30 name='test' distance=2000>]"
 
 
-def test_add_last_checkpoint_many_near():
-    checkpoints = [
-        CheckPoint(lat=60.1, lng=30.1, distance=0),
-        CheckPoint(lat=60.3, lng=30.3, distance=100),
-        CheckPoint(lat=60.2, lng=30.2, distance=200),
-    ]
-    expected = [
-        CheckPoint(lat=60.1, lng=30.1, distance=0),
-        CheckPoint(lat=60.3, lng=30.3, distance=100),
-        CheckPoint(lat=60.2, lng=30.2, distance=200),
-    ]
+def test_add_last_checkpoint_add():
+    # setup
+    checkpoint = CheckPoint(lat=60, lng=30, distance=2000, name="test")
+    route = Route(checkpoints=[checkpoint], track=[RoutePoint(lat=40.78, lng=43.86, distance=5000)])
+    route._add_last_checkpoint()
 
-    add_last_checkpoint(checkpoints, RoutePoint(lat=60.4, lng=30.4, distance=200.5))
-
-    assert checkpoints == expected
-
-
-def test_add_last_checkpoint_many_far():
-    checkpoints = [
-        CheckPoint(lat=60.1, lng=30.1, distance=0),
-        CheckPoint(lat=60.3, lng=30.3, distance=100),
-        CheckPoint(lat=60.2, lng=30.2, distance=200),
-    ]
-    expected = [
-        CheckPoint(lat=60.1, lng=30.1, distance=0),
-        CheckPoint(lat=60.3, lng=30.3, distance=100),
-        CheckPoint(lat=60.2, lng=30.2, distance=200),
-        CheckPoint(lat=60.4, lng=30.4, distance=201, name="End"),
-    ]
-
-    add_last_checkpoint(checkpoints, RoutePoint(lat=60.4, lng=30.4, distance=201000))
-
-    assert checkpoints == expected
+    # verification
+    assert str(route.checkpoints) == "[<CheckPoint lat=60 lng=30 name='test' distance=2000>, <CheckPoint lat=40.78 lng=43.86 name='End' distance=5000>]"

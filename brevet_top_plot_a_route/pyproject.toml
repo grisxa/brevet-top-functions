@@ -27,6 +27,7 @@ classifiers = [
 dependencies = [
   "rdp==0.8",
   "numpy>=1.21.5",
+  "dataclasses_json==^0.5.12",
   "brevet-top-numpy-utils"
 ]
 
