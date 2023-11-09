@@ -1,17 +1,13 @@
-import json
 import logging
-from typing import List
 from typing import Optional
 
-import requests
-
-from .check_point import CheckPoint
-from .exceptions import RouteNotFound
-from .route import Route
-from .route_point import RoutePoint
 from brevet_top_plot_a_route.utils import get_map_id_from_url, download_data
 
+from .exceptions import RouteNotFound
+from .route import Route
+
 API_PREFIX: str = "https://www.plotaroute.com/get_route.asp"
+
 
 def get_route_info(url: str) -> Optional[dict]:
     """

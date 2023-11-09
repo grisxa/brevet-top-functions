@@ -1,5 +1,4 @@
 import logging
-from copy import deepcopy
 from itertools import compress
 from typing import List, Optional
 
@@ -7,7 +6,6 @@ import numpy as np
 import requests
 from rdp import rdp
 
-from .check_point import CheckPoint
 from .route_point import RoutePoint
 
 ROUTE_PREFIX: str = "https://www.plotaroute.com/route/"
