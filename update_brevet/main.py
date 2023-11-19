@@ -1,4 +1,5 @@
 import logging
+import os
 from datetime import datetime, timedelta
 from typing import List
 
@@ -13,8 +14,8 @@ from brevet_top_plot_a_route import get_route_info, ROUTE_PREFIX
 
 log_client = google.cloud.logging.Client()
 log_client.get_default_handler()
-log_client.setup_logging(log_level=logging.DEBUG)
-# logging.basicConfig(level=logging.DEBUG)
+log_client.setup_logging(log_level=os.getenv("LOG_LEVEL", "WARNING"))
+logging.basicConfig(level=os.getenv("LOG_LEVEL", "WARNING"))
 
 firebase_admin.initialize_app()
 db_client = google.cloud.firestore.Client()

@@ -90,6 +90,7 @@ jobs:
           runtime: 'python39'
           source_dir: update_brevet
           entry_point: update_brevet
+          env_vars: LOG_LEVEL=INFO
           timeout: 180
           event_trigger_type: "providers/cloud.firestore/eventTypes/document.update"
           event_trigger_resource: "projects/baltic-star-cloud/databases/(default)/documents/brevets/{brevetUid}"

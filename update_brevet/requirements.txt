@@ -7,4 +7,4 @@ python_dateutil==2.8.2
 rdp==0.8
 numpy>=1.21.5
 brevet-top-gcp-utils==0.1.0
-brevet-top-plot-a-route==0.1.0
+brevet-top-plot-a-route==0.1.3
