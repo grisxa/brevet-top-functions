@@ -92,6 +92,7 @@ def strava_compare(athlete_id: int, activity_id: int, secret: dict):
     :param activity_id: The activity to test
     :param secret: Secret Manager exposed to the environment
     """
+    # may be several accounts linked to the same Strava athlete
     riders = search_strava_riders(athlete_id)
 
     if len(riders) < 1:
@@ -102,6 +103,7 @@ def strava_compare(athlete_id: int, activity_id: int, secret: dict):
     for rider_dict in riders:
         logging.debug(f"Rider {rider_dict['uid']}")
 
+        # use the athlete's tokens
         tokens = rider_dict["strava"]
         if tokens_expired(datetime.now(), tokens):
             logging.debug("Strava token has expired, refreshing")
