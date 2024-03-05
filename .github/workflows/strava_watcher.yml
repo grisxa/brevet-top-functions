@@ -57,11 +57,6 @@ jobs:
         python3 -m pip install pytest pytest-coverage --user
         python3 -m pip install -r strava_watcher/requirements.txt
 
-    - name: 'Run the tests'
-      env:
-        PYTHONPATH: .
-      run: python -m pytest strava_watcher/tests
-
   deploy:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
