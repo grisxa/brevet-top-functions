@@ -86,6 +86,12 @@ def strava_revoke(athlete_id: int):
 
 
 def strava_compare(athlete_id: int, activity_id: int, secret: dict):
+    """
+    Compare the Strava activity and a brevet route
+    :param athlete_id: The athlete id to search for
+    :param activity_id: The activity to test
+    :param secret: Secret Manager exposed to the environment
+    """
     riders = search_strava_riders(athlete_id)
 
     if len(riders) < 1:
