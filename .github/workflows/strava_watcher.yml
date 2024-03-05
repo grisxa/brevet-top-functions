@@ -89,5 +89,5 @@ jobs:
           secret_environment_variables: 'STRAVA=projects/baltic-star-cloud/secrets/strava:latest'
           timeout: 300
           memory_mb: 512
-          event_trigger_type: "providers/cloud.pubsub/eventTypes/topic.publish"
+          event_trigger_type: "google.pubsub.topic.publish"
           event_trigger_resource: "projects/baltic-star-cloud/topics/strava"
