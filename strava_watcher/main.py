@@ -52,6 +52,7 @@ def strava_watcher(event, context: Context):
         ):
             strava_revoke(int(data["object_id"]))
 
+        # detect activity update
         if data["object_type"] == "activity":
             logging.debug(
                 f"Athlete {data['owner_id']} "
