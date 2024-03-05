@@ -44,6 +44,7 @@ def strava_watcher(event, context: Context):
             logging.error("Invalid subscription id")
             raise HTTPError("Invalid parameters")
 
+        # detect athlete unsubscription
         if (
             data["object_type"] == "athlete"
             and data["aspect_type"] == "update"
