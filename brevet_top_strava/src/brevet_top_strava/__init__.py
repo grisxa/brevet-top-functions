@@ -5,15 +5,14 @@ from typing import List
 import numpy as np
 
 from brevet_top_numpy_utils import FloatArray
-from .api import auth_token, get_activities, get_track_points
-from .exceptions import ActivityNotFound, ActivityError
+
+from .api import (auth_token, get_activities, get_activity, get_track_points,  # noqa: F401
+                  refresh_tokens, tokens_expired)  # noqa: F401
+from .build import build_checkpoint_list  # noqa: F401
+from .exceptions import ActivityError, ActivityNotFound, AthleteNotFound  # noqa: F401
 from .math import np_align_track_to_route, np_geo_distance_track
-from .simplify import (
-    cut_off_epilog,
-    cut_off_prolog,
-    clear_stops,
-    down_sample_mask,
-)
+from .simplify import (clear_stops, cut_off_epilog, cut_off_prolog,
+                       down_sample_mask)
 
 TRACK_SIMPLIFY_FACTOR: float = 0.0005
 TRACK_DEVIATION_MAX: int = 200
@@ -21,9 +20,7 @@ TRACK_DEVIATION_MIN: int = 200
 CONTROL_DEVIATION_FACTOR: int = 500
 
 
-def search_strava_activities(
-    brevet: dict, tokens: dict, checkpoints: FloatArray
-) -> FloatArray:
+def search_strava_activities(brevet: dict, tokens: dict, checkpoints: FloatArray) -> FloatArray:
     # get a list of Strava activities in the given time window
     activities: List[dict] = get_activities(brevet, auth_token(tokens))
     if len(activities) < 1:
@@ -41,9 +38,7 @@ def track_alignment(
     checkpoints: FloatArray,
 ) -> FloatArray:
     # retrieve activities and transform to a track
-    draft: FloatArray = get_track_points(
-        sorted(activities, key=lambda a: a["start_date"]), auth_token(tokens)
-    )
+    draft: FloatArray = get_track_points(sorted(activities, key=lambda a: a["start_date"]), auth_token(tokens))
     logging.info(f"Full track length {len(draft)}")
 
     start = timer()
@@ -75,13 +70,9 @@ def track_alignment(
         raise ActivityError(message)
 
     # re-calculate the cost ignoring distance from the start
-    cost_reviewed = np_geo_distance_track(
-        np.array(short_track), reduced, factor=np.float64(0)
-    )
+    cost_reviewed = np_geo_distance_track(np.array(short_track), reduced, factor=np.float64(0))
     track_time = timer()
-    logging.info(
-        f"Total track difference {cost} / {cost_reviewed}, took {track_time-start} sec."
-    )
+    logging.info(f"Total track difference {cost} / {cost_reviewed}, took {track_time-start} sec.")
 
     if cost_reviewed > brevet.get("trackDeviation", len(reduced) * TRACK_DEVIATION_MIN):
         message = f"Track deviation {cost_reviewed}"
@@ -94,9 +85,7 @@ def track_alignment(
     # re-calculate the cost ignoring distance from the start
     cost_reviewed = np_geo_distance_track(np.array(checkpoints), reduced, np.float64(0))
     cp_time = timer()
-    logging.info(
-        f"Total checkpoint difference {cost_reviewed}, took {cp_time-track_time} sec."
-    )
+    logging.info(f"Total checkpoint difference {cost_reviewed}, took {cp_time-track_time} sec.")
 
     if cost_reviewed > brevet.get("controlDeviation", (len(checkpoints) / 2.0 + 1) * CONTROL_DEVIATION_FACTOR):
         message = f"Control point deviation {cost_reviewed}"

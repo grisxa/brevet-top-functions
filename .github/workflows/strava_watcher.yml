@@ -1,0 +1,98 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Strava watcher trigger
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+    paths: [ "strava_watcher/**" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.11.x"
+
+    - id: auth_key
+      name: 'Authenticate to Google Cloud'
+      uses: 'google-github-actions/auth@v1'
+      with:
+        credentials_json: ${{ secrets.SERVICE_ACCOUNT_KEY }}
+
+    - name: 'Set up Cloud SDK'
+      uses: 'google-github-actions/setup-gcloud@v1'
+      with:
+        version: '>= 363.0.0'
+
+    - name: 'Extract credentials'
+      id: credentials
+      run: |
+        config=$(gcloud artifacts print-settings python \
+          --project=${{ vars.GCLOUD_PROJECT }} \
+          --repository=${{ vars.GCLOUD_REPO_NAME }} \
+          --location=us-central1 \
+          --json-key="$GOOGLE_APPLICATION_CREDENTIALS")
+        echo "$config"| head -n -5 > ~/.pypirc
+        mkdir -p ~/.pip
+        echo "$config" | tail -n +11 > ~/.pip/pip.conf
+
+    - name: 'Install test tools and dependencies'
+      run: |
+        python3 -m pip install pytest pytest-coverage --user
+        python3 -m pip install -r strava_watcher/requirements.txt
+
+    - name: 'Run the tests'
+      env:
+        PYTHONPATH: .
+      run: python -m pytest strava_watcher/tests
+
+  deploy:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    needs: test
+    permissions:
+      contents: read
+      id-token: write
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+
+      - id: auth
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          workload_identity_provider: 'projects/289323711544/locations/global/workloadIdentityPools/baltic-star-pool/providers/github-actions-provider'
+          service_account: 'github-deploy-functions@baltic-star-cloud.iam.gserviceaccount.com'
+
+      - id: deploy
+        name: Deploy Strava watcher trigger to the cloud
+        uses: google-github-actions/deploy-cloud-functions@v1.0.1
+        with:
+          name: 'stravaWatcher'
+          runtime: 'python39'
+          source_dir: strava_watcher
+          entry_point: strava_watcher
+          env_vars: LOG_LEVEL=INFO
+          secret_environment_variables: 'STRAVA=projects/baltic-star-cloud/secrets/strava:latest'
+          timeout: 300
+          memory_mb: 512
+          event_trigger_type: "providers/cloud.pubsub/eventTypes/topic.publish"
+          event_trigger_resource: "strava"
