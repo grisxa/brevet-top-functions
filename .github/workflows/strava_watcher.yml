@@ -87,7 +87,7 @@ jobs:
           source_dir: strava_watcher
           entry_point: strava_watcher
           env_vars: LOG_LEVEL=INFO
-          secret_environment_variables: 'STRAVA=projects/baltic-star-cloud/secrets/strava:latest'
+          secret_environment_variables: 'STRAVA=projects/baltic-star-cloud/secrets/strava/versions/latest'
           timeout: 300
           memory_mb: 512
           event_trigger_type: "google.pubsub.topic.publish"
