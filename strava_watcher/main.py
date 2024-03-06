@@ -167,6 +167,9 @@ def strava_compare(athlete_id: int, activity_id: int, secret: dict):
 
 
 def search_strava_riders(athlete_id: int) -> List[dict]:
+    """
+    Query the database for private/{rider}/strava.athlete_id to match the given id
+    """
     return [
         db_client.document(f"private/{doc.id}").get().to_dict()
         for doc in db_client.collection("private")
