@@ -117,6 +117,7 @@ def strava_compare(athlete_id: int, activity_id: int, secret: dict):
     if not activity:
         raise ActivityNotFound(f"Can't download activity {activity_id}")
 
+    # only Ride activities are being supported
     if activity["type"] != "Ride":
         raise ActivityNotFound(f"Not a ride {activity_id}")
 
