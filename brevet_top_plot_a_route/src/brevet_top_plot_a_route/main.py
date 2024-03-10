@@ -30,7 +30,7 @@ def get_route_info(url: str) -> Optional[dict]:
         return None
 
     try:
-        route.find_checkpoints()
+        route.checkpoints = route.find_checkpoints()
     except ValueError as error:
         logging.error(f"Route checkpoint error {url} : {error}")
 

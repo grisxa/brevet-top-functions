@@ -40,9 +40,6 @@ class CheckPoint(RoutePoint):
 
         :return: a list of new CheckPoints
         """
-        for label in self.symlabs:
-            cp = CheckPoint(**label, labtxt=label.get("lab", {}).get("labtxt"))
-
         return [
             CheckPoint(**label, labtxt=label.get("lab", {}).get("labtxt"))
             for label in self.symlabs
