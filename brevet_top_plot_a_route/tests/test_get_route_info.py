@@ -51,7 +51,7 @@ mock_download = {
     "CreatorID": 123,
 }
 
-mock_download_short= {
+mock_download_short = {
     "RouteData": "[]",
     "RouteID": 123,
     "RouteName": "Jogging",
@@ -88,11 +88,11 @@ mock_checkpoints = [
 def test_get_route_info(
     mock_downloader,
     mock_tracks,
-    mock_checkpoints,
+    mock_cps,
 ):
     # setup
     expected = {
-        "checkpoints": None,
+        "checkpoints": mock_checkpoints,
         "name": "Jogging",
         "length": 3,
         "mapUrl": "https://www.plotaroute.com/route/123",
@@ -108,7 +108,7 @@ def test_get_route_info(
         "https://www.plotaroute.com/get_route.asp?RouteID=123"
     )
     mock_tracks.assert_called_once()
-    mock_checkpoints.assert_called_once()
+    mock_cps.assert_called_once()
     assert info == expected
 
 
