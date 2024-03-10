@@ -1,4 +1,4 @@
-__version__ = '0.1.3'
+__version__ = '0.1.4'
 __author__ = 'Grigorii Batalov'
 __license__ = 'MIT'
 __description__ = 'Utils for Plot-a-route service in the brevet.top'
