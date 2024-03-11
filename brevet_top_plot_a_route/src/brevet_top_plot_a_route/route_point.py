@@ -54,14 +54,11 @@ class RoutePoint(PlotARoutePoint):
 
         :return: True or False
         """
+        prefixes: list[str] = ["CP", "КП", "Start", "Старт", "End", "Финиш"]
+
         direction: str = self.dir or ""
         label: str = self.labtxt or ""
-        return (
-                direction.startswith("КП")
-                or direction.startswith("CP")
-                or label.startswith("КП")
-                or label.startswith("CP")
-        )
+        return any(direction.startswith(prefix) or label.startswith(prefix) for prefix in prefixes)
 
     def __repr__(self):
         return f"<RoutePoint lat={self.lat} lng={self.lng} distance={self.distance}>"
