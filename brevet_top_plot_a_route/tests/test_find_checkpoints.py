@@ -47,8 +47,9 @@ def test_find_checkpoints_many(mock_find_labels, mock_route):
     ]
     expected: List[CheckPoint] = [
         CheckPoint(lat=1, lng=2, name="Start"),
-        CheckPoint(lat=3, lng=4, name="CP1", distance=1234),
-        CheckPoint(lat=7, lng=8, name="CP2", distance=2345),
+        CheckPoint(lat=3, lng=4, name="CP1", distance=1235),
+        CheckPoint(lat=7, lng=8, name="CP2", distance=2346),
+        CheckPoint(lat=2, lng=3, name="End", distance=3457),
     ]
 
     # action

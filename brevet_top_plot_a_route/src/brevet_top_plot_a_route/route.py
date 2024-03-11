@@ -91,11 +91,11 @@ class Route:
         labels: List[CheckPoint] = []
         # search for symlabs checkpoints
         labels.extend(label for label in first_point.find_labels() if label.is_control())
-        self._attach_labels(labels, [(p.lat, p.lng, 0, p.distance) for p in self.track])
 
+        self._attach_labels(labels, [(p.lat, p.lng, 0, p.distance) for p in self.track])
         checkpoints.extend(labels)
-        self._add_last_checkpoint()
-        return checkpoints
+
+        return self._add_last_checkpoint(checkpoints)
 
     @staticmethod
     def _attach_labels(labels: List[CheckPoint], points: List[Tuple[float, float, float, float]]):
@@ -114,18 +114,19 @@ class Route:
             if not label.distance:
                 label.distance = round(points[offset][3] / 1000)
 
-    def _add_last_checkpoint(self):
+    def _add_last_checkpoint(self, checkpoints: Optional[List[CheckPoint]] = None) -> Optional[List[CheckPoint]]:
         """
         Compare the route and checkpoint list and add a new CheckPoint if the route is longer.
         """
         if not self.track:
-            return
+            return checkpoints
         finish = self.track[-1]
         # add the last point from the route if too far from the last control
         if (
-                self.checkpoints is not None
-                and len(self.checkpoints) > 0
-                and finish.distance > self.checkpoints[-1].distance * 1000 + EPILOG_MAX_LENGTH
+                checkpoints is not None
+                and len(checkpoints) > 0
+                and finish.distance > checkpoints[-1].distance * 1000 + EPILOG_MAX_LENGTH
         ):
             checkpoint = CheckPoint.from_route_point(finish, name="End")
-            self.checkpoints.append(checkpoint)
+            checkpoints.append(checkpoint)
+        return checkpoints
