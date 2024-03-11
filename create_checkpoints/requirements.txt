@@ -5,4 +5,4 @@ google-cloud-logging==2.6.0
 Flask==2.2.5
 flask-cors==3.0.10
 brevet-top-gcp-utils==0.1.1
-brevet-top-plot-a-route==0.1.6
+brevet-top-plot-a-route==0.1.7
