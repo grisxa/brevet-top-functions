@@ -6,10 +6,10 @@ from brevet_top_plot_a_route.check_point import CheckPoint
 @pytest.mark.parametrize(
     ("kwargs", "dump"),
     [
-        ({}, "<CheckPoint lat=0 lng=0 name='' distance=0.0>"),
-        ({"lat": 60, "lng": 30, "distance": 1000}, "<CheckPoint lat=60 lng=30 name='' distance=1.0>"),
+        ({}, "<CheckPoint lat=0 lng=0 name='' distance=0>"),
+        ({"lat": 60, "lng": 30, "distance": 1000}, "<CheckPoint lat=60 lng=30 name='' distance=1>"),
         ({"lat": 60, "lng": 30, "distance": 1000, "labtxt": "start"},
-         "<CheckPoint lat=60 lng=30 name='start' distance=1.0>"),
+         "<CheckPoint lat=60 lng=30 name='start' distance=1>"),
     ]
 )
 def test_check_point(kwargs, dump):

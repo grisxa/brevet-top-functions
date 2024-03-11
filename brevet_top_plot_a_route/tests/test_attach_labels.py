@@ -38,4 +38,4 @@ def test_attach_labels(labels):
     )
 
     # verification
-    assert [label.distance for label in labels] == [3456.78, 5678.9]
+    assert [label.distance for label in labels] == [3, 5]

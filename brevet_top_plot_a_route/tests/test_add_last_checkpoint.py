@@ -37,8 +37,8 @@ def test_add_last_checkpoint_close():
     route._add_last_checkpoint()
 
     # verification
-    assert str(route.checkpoints) == ("[<CheckPoint lat=60 lng=30 name='test' distance=2.0>,"
-                                      " <CheckPoint lat=40.78 lng=43.86 name='End' distance=3.0>]")
+    assert str(route.checkpoints) == ("[<CheckPoint lat=60 lng=30 name='test' distance=2>,"
+                                      " <CheckPoint lat=40.78 lng=43.86 name='End' distance=3>]")
 
 
 def test_add_last_checkpoint_add():
@@ -48,4 +48,4 @@ def test_add_last_checkpoint_add():
     route._add_last_checkpoint()
 
     # verification
-    assert str(route.checkpoints) == "[<CheckPoint lat=60 lng=30 name='test' distance=2.0>, <CheckPoint lat=40.78 lng=43.86 name='End' distance=5.0>]"
+    assert str(route.checkpoints) == "[<CheckPoint lat=60 lng=30 name='test' distance=2>, <CheckPoint lat=40.78 lng=43.86 name='End' distance=5>]"
