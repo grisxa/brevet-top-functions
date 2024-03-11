@@ -112,7 +112,7 @@ class Route:
             )
             offset: int = np.argmin(step_away)  # noqa: E711
             if not label.distance:
-                label.distance = int(points[offset][3] / 1000)
+                label.distance = round(points[offset][3] / 1000)
 
     def _add_last_checkpoint(self):
         """
@@ -125,7 +125,7 @@ class Route:
         if (
                 self.checkpoints is not None
                 and len(self.checkpoints) > 0
-                and finish.distance > self.checkpoints[-1].distance + EPILOG_MAX_LENGTH
+                and finish.distance > self.checkpoints[-1].distance * 1000 + EPILOG_MAX_LENGTH
         ):
             checkpoint = CheckPoint.from_route_point(finish, name="End")
             self.checkpoints.append(checkpoint)
