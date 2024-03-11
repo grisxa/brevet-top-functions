@@ -13,6 +13,7 @@ class CheckPoint(RoutePoint):
         super().__init__(**kwargs)
         self.name = name
         self.fix_name()
+        self.distance = kwargs.pop("distance", 0) / 1000
 
     @classmethod
     def from_route_point(cls, point: RoutePoint, name: str = ""):
