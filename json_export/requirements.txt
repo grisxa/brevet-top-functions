@@ -4,3 +4,4 @@ google-cloud-logging==2.6.0
 flask-cors==3.0.10
 timezonefinder[numba]==5.2.0
 pytz==2021.3
+brevet-top-gcp-utils==0.1.2
