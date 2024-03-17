@@ -27,6 +27,7 @@ classifiers = [
 dependencies = [
   "firebase-admin==5.2.0",
   "google-cloud-firestore==2.3.4",
+  "google-cloud-logging==2.6.0",
   "brevet-top-plot-a-route",
   "brevet-top-strava",
 ]
