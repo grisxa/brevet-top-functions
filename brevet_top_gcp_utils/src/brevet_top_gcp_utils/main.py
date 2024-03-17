@@ -82,3 +82,17 @@ def resolve_document(
     else:
         # retrieve document
         return db.document(f"brevets/{doc_uid}")
+
+
+def get_checkpoints(brevet_uid: str, db=google.cloud.firestore.Client()) -> list[dict]:
+    """
+    Retrieves the checkpoint list from the brevet document with sorting by distance and coordinates conversion.
+
+    :param brevet_uid: the brevet UID
+    :param db: a client to use and share
+    :return: a list of checkpoint dictionaries
+    """
+
+    checkpoints: list = [cp.to_dict() for cp in db.document(f"brevets/{brevet_uid}").collection("checkpoints").get()]
+    checkpoints.sort(key=lambda x: x.get("distance", 0))
+    return [{**cp, "coordinates": firestore_to_track_point(cp)} for cp in checkpoints if cp.get("uid")]
