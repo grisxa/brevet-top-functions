@@ -8,5 +8,5 @@ python_dateutil==2.8.2
 pytz==2021.3
 rdp==0.8
 numpy>=1.21.5
-brevet-top-gcp-utils==0.1.1
+brevet-top-gcp-utils==0.1.4
 brevet-top-strava==0.1.1

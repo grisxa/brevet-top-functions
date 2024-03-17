@@ -13,7 +13,8 @@ from google.cloud.functions.context import Context
 from pytz import utc
 from requests import HTTPError
 
-from brevet_top_gcp_utils import create_document, firestore_to_track_point
+from brevet_top_gcp_utils import (create_document, firestore_to_track_point,
+                                  get_checkpoints)
 from brevet_top_strava import (ActivityError, ActivityNotFound,
                                AthleteNotFound, auth_token,
                                build_checkpoint_list, get_activity,
@@ -137,7 +138,7 @@ def strava_compare(athlete_id: int, activity_id: int, secret: dict):
         ]
 
         # prepare a list of control points (check-in / check-out) necessary to visit
-        checkpoints, ids = build_checkpoint_list(get_checkpoints(brevet_dict["uid"]))
+        checkpoints, ids = build_checkpoint_list(get_checkpoints(brevet_dict["uid"], db=db_client))
         # logging.debug(f"Checkpoints {checkpoints} / {ids}")
 
         # start searching
@@ -189,21 +190,6 @@ def search_brevets(start_date: datetime) -> List[dict]:
         .where("startDate", ">", start_date - timedelta(hours=12))
         .where("startDate", "<", start_date + timedelta(hours=12))
         .stream()
-    ]
-
-
-def get_checkpoints(brevet_uid: str) -> List[dict]:
-    checkpoints: list = [
-        cp.to_dict()
-        for cp in db_client.document(f"brevets/{brevet_uid}")
-        .collection("checkpoints")
-        .get()
-    ]
-    checkpoints.sort(key=lambda x: x.get("distance", 0))
-    return [
-        {**cp, "coordinates": firestore_to_track_point(cp)}
-        for cp in checkpoints
-        if cp.get("uid")
     ]
 
 
