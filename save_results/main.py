@@ -1,5 +1,4 @@
 import logging
-import re
 from datetime import datetime
 from typing import List
 
@@ -9,6 +8,8 @@ import google.cloud.logging
 from flask import Request, json
 from flask_cors import cross_origin
 from google.api_core.datetime_helpers import DatetimeWithNanoseconds
+
+from brevet_top_gcp_utils import resolve_document
 
 log_client = google.cloud.logging.Client()
 log_client.get_default_handler()
@@ -36,7 +37,7 @@ def save_results(request: Request):
     logging.info(f"Saving results of the brevet {doc_uid}")
 
     try:
-        brevet_doc = resolve_document(doc_uid)
+        brevet_doc = resolve_document(doc_uid, db=db_client)
     except ValueError as error:
         return json.dumps({"message": str(error)}), 404
 
@@ -96,21 +97,6 @@ def save_results(request: Request):
         return json.dumps({"message": str(error)}), 500
 
     return json.dumps({"data": f"/json/brevet/{doc_uid}"}), 200
-
-
-def resolve_document(doc_uid: str):
-    if re.match("^\\d+$", doc_uid):
-        logging.info(f"Looking for alias of {doc_uid}")
-        alias_doc = db_client.document(f"aliases/{doc_uid}")
-        alias_dict = alias_doc.get().to_dict()
-        if not alias_dict:
-            raise ValueError(f"Alias {doc_uid} not found")
-
-        # retrieve reference
-        return alias_dict.get("brevet_uid")
-    else:
-        # retrieve document
-        return db_client.document(f"brevets/{doc_uid}")
 
 
 def is_manual_checkin(checkin: DatetimeWithNanoseconds) -> bool:
