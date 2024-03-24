@@ -7,7 +7,7 @@ import numpy as np
 from brevet_top_numpy_utils import FloatArray
 
 from .api import (auth_token, get_activities, get_activity, get_track_points,  # noqa: F401
-                  refresh_tokens, tokens_expired)  # noqa: F401
+                  refresh_tokens, TimeWindow, time_window, tokens_expired)  # noqa: F401
 from .build import build_checkpoint_list  # noqa: F401
 from .exceptions import ActivityError, ActivityNotFound, AthleteNotFound  # noqa: F401
 from .math import np_align_track_to_route, np_geo_distance_track
@@ -22,7 +22,7 @@ CONTROL_DEVIATION_FACTOR: int = 500
 
 def search_strava_activities(brevet: dict, tokens: dict, checkpoints: FloatArray) -> FloatArray:
     # get a list of Strava activities in the given time window
-    activities: List[dict] = get_activities(brevet, auth_token(tokens))
+    activities: List[dict] = get_activities(time_window(brevet), auth_token(tokens))
     if len(activities) < 1:
         message = "No tracks found"
         logging.error(message)

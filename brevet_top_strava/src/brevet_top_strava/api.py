@@ -1,6 +1,6 @@
 import logging
 from datetime import datetime, timedelta
-from typing import Final, List, Tuple, TypedDict
+from typing import Final, List, Tuple, TypedDict, Optional
 
 import numpy as np
 import requests
@@ -18,8 +18,14 @@ STREAM_OPTIONS: Final[dict] = {
 
 
 class TimeWindow(TypedDict):
-    before: float
+    """
+    Time window for Strava activities searching
+
+    after - starting point in time
+    before - ending point in time (optional)
+    """
     after: float
+    before: Optional[float]
 
 
 def auth_token(tokens: dict) -> str:
@@ -94,11 +100,11 @@ def download_data(url: str, headers: dict, params: dict = None):
         raise
 
 
-def get_activities(brevet: dict, token: str) -> List[dict]:
+def get_activities(time_dict: TimeWindow, token: str) -> List[dict]:
     headers = {"Authorization": token}
 
     activities: List[dict] = download_data(
-        f"{API_BASE_URL}/athlete/activities", headers, params=time_window(brevet)
+        f"{API_BASE_URL}/athlete/activities", headers, params=time_dict
     )
 
     # Take bike rides only
