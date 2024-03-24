@@ -1,14 +1,13 @@
 import logging
-from datetime import timedelta, datetime
-from typing import List, Tuple, Final
+from datetime import datetime, timedelta
+from typing import Final, List, Tuple, TypedDict
 
 import numpy as np
 import requests
 from brevet_top_numpy_utils import FloatArray
 from requests.exceptions import HTTPError
 
-
-from .build import get_track_start_point, build_track
+from .build import build_track, get_track_start_point
 
 AUTH_BASE_URL: str = "https://www.strava.com/oauth"
 API_BASE_URL: str = "https://www.strava.com/api/v3"
@@ -16,6 +15,11 @@ STREAM_OPTIONS: Final[dict] = {
     "keys": "latlng,time",
     "key_by_type": True,
 }
+
+
+class TimeWindow(TypedDict):
+    before: float
+    after: float
 
 
 def auth_token(tokens: dict) -> str:
@@ -53,7 +57,7 @@ def refresh_tokens(tokens: dict, config: dict) -> dict:
         raise
 
 
-def time_window(brevet: dict) -> dict:
+def time_window(brevet: dict) -> TimeWindow:
     """
     Compose HTTP parameters considering start and end time.
     Reserve a 2-hour gap before the start and after the end.
@@ -61,9 +65,9 @@ def time_window(brevet: dict) -> dict:
     :param brevet: a dict with the brevet details
     :return: a dict with parameters
     """
-    after = brevet.get("startDate")
-    before = brevet.get("endDate")
-    params = {}
+    after: datetime = brevet.get("startDate")
+    before: datetime = brevet.get("endDate")
+    params: TimeWindow = {}
     if after is not None:
         params["after"] = (after - timedelta(hours=2)).timestamp()
     if before is not None:
