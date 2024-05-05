@@ -19,6 +19,8 @@ logging.basicConfig(level=logging.DEBUG)
 firebase_admin.initialize_app()
 db_client = google.cloud.firestore.Client()
 
+MANUAL_MICROSECONDS = 123456
+
 
 @cross_origin(methods="POST")
 def save_results(request: Request):
@@ -83,11 +85,7 @@ def save_results(request: Request):
                         logging.error(
                             f"Empty time of rider {rider_uid} {checkin['name']}"
                         )
-                    times: List[datetime] = (
-                        [t for t in checkin["time"] if is_manual_checkin(t)]
-                        + [t for t in checkin["time"] if is_self_checkin(t)]
-                        + [t for t in checkin["time"] if is_strava_checkin(t)]
-                    )
+                    times: List[datetime] = checkin_reorder(checkin["time"])
                     if len(times) < 1:
                         continue
                     brevet_dict["results"][rider_uid]["checkins"][i] = times[0]
@@ -101,7 +99,7 @@ def save_results(request: Request):
 
 def is_manual_checkin(checkin: DatetimeWithNanoseconds) -> bool:
     """The time entered manually by a volunteer"""
-    return checkin.second == 0 and checkin.microsecond == 0 and checkin.nanosecond == 0
+    return checkin.microsecond == MANUAL_MICROSECONDS
 
 
 def is_strava_checkin(checkin: DatetimeWithNanoseconds) -> bool:
@@ -111,4 +109,16 @@ def is_strava_checkin(checkin: DatetimeWithNanoseconds) -> bool:
 
 def is_self_checkin(checkin: DatetimeWithNanoseconds) -> bool:
     """The time entered by the rider"""
-    return checkin.microsecond != 0 or checkin.nanosecond != 0
+    return (
+        checkin.microsecond != 0 or checkin.nanosecond != 0
+    ) and checkin.microsecond != MANUAL_MICROSECONDS
+
+
+def checkin_reorder(
+    checkins: list[DatetimeWithNanoseconds],
+) -> list[DatetimeWithNanoseconds]:
+    return (
+        [t for t in checkins if is_manual_checkin(t)]
+        + [t for t in checkins if is_self_checkin(t)]
+        + [t for t in checkins if is_strava_checkin(t)]
+    )

@@ -1,1 +1,1 @@
-from .main import save_results, is_manual_checkin, is_strava_checkin, is_self_checkin  # noqa: F401
+from .main import is_manual_checkin, is_self_checkin, is_strava_checkin, save_results  # noqa: F401
