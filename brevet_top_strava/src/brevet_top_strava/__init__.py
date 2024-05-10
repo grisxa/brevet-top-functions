@@ -28,17 +28,18 @@ def search_strava_activities(brevet: dict, tokens: dict, checkpoints: FloatArray
         logging.error(message)
         raise ActivityNotFound(message)
 
-    return track_alignment(brevet, tokens, activities, checkpoints)
+    # retrieve activities and transform to a track
+    track: FloatArray = get_track_points(sorted(activities, key=lambda a: a["start_date"]), auth_token(tokens))
+
+    return track_alignment(brevet, track, checkpoints)
 
 
 def track_alignment(
     brevet: dict,
-    tokens: dict,
-    activities: List[dict],
+    draft: FloatArray,
     checkpoints: FloatArray,
 ) -> FloatArray:
-    # retrieve activities and transform to a track
-    draft: FloatArray = get_track_points(sorted(activities, key=lambda a: a["start_date"]), auth_token(tokens))
+
     logging.info(f"Full track length {len(draft)}")
 
     start = timer()
