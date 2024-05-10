@@ -1,6 +1,6 @@
 import numpy as np
 
-from brevet_top_strava.math import np_geo_distance
+from brevet_top_numpy_utils.main import np_geo_distance
 
 
 def test_np_geo_distance():
@@ -14,7 +14,7 @@ def test_np_geo_distance():
             (0, 0, 0, 0),
         ]
     )
-    point = (60, 20, 0, 150)
+    point = np.array([60, 20, 0, 150])
     expected = [1111949.416, 0.15, 0.0, 1.0, 555445.183, 6891381.266]
 
     distance = np_geo_distance(point, track)
