@@ -13,12 +13,10 @@ from google.cloud.functions.context import Context
 from pytz import utc
 from requests import HTTPError
 
-from brevet_top_gcp_utils import (create_document, firestore_to_track_point,
-                                  get_checkpoints)
-from brevet_top_strava import (ActivityError, ActivityNotFound,
-                               AthleteNotFound, auth_token,
-                               build_checkpoint_list, get_activity,
-                               refresh_tokens, tokens_expired, track_alignment)
+from brevet_top_gcp_utils import create_document, firestore_to_track_point, get_checkpoints
+from brevet_top_numpy_utils import FloatArray
+from brevet_top_strava import (ActivityError, ActivityNotFound, AthleteNotFound, auth_token, build_checkpoint_list,
+                               get_activity, get_track_points, refresh_tokens, tokens_expired, track_alignment)
 
 log_client = google.cloud.logging.Client()
 log_client.get_default_handler()
@@ -143,8 +141,10 @@ def strava_compare(athlete_id: int, activity_id: int, secret: dict):
 
         # start searching
         try:
+            # retrieve activities and transform to a track
+            track: FloatArray = get_track_points(sorted([activity], key=lambda a: a["start_date"]), auth_token(riders[0]["strava"]))
             points = track_alignment(
-                brevet_dict, riders[0]["strava"], [activity], checkpoints
+                brevet_dict, track, checkpoints
             )
         except (ActivityNotFound, ActivityError) as error:
             logging.error(f"Activity error {error}")
