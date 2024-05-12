@@ -1,9 +1,6 @@
-from typing import Tuple
-
 import numpy as np
 
-from brevet_top_numpy_utils import FloatArray
-from .math import np_geo_distance
+from brevet_top_numpy_utils import FloatArray, np_geo_distance
 
 # from plot_a_route import geo_distance
 
@@ -22,13 +19,11 @@ def clear_stops(track: FloatArray, checkpoints: FloatArray) -> FloatArray:
     """
     mask = [True] * track.shape[0]
     for cp in checkpoints:
-        mask = mask & (np_geo_distance(cp, track, factor=0) > CHECKPOINT_RADIUS)
+        mask = mask & (np_geo_distance(cp, track, factor=np.float64(0.0)) > CHECKPOINT_RADIUS)
     return track[mask]
 
 
-def cut_off_epilog(
-    track: FloatArray, end: Tuple[float, float, float, float]
-) -> FloatArray:
+def cut_off_epilog(track: FloatArray, end: FloatArray) -> FloatArray:
     """
     Remove points after the last route point.
 
@@ -40,15 +35,11 @@ def cut_off_epilog(
         return track
     backwards: FloatArray = np.flipud(track)
     # index of the nearest point to the finish
-    offset: int = np.argmax(  # type: ignore[assignment]
-        np_geo_distance(end, backwards) < CHECKPOINT_RADIUS
-    )
+    offset: int = np.argmax(np_geo_distance(end, backwards) < CHECKPOINT_RADIUS)  # type: ignore[assignment]
     return np.flipud(backwards[offset:])
 
 
-def cut_off_prolog(
-    track: FloatArray, start: Tuple[float, float, float, float]
-) -> FloatArray:
+def cut_off_prolog(track: FloatArray, start: FloatArray) -> FloatArray:
     """
     Remove points before the start route point.
 
@@ -59,30 +50,12 @@ def cut_off_prolog(
     if len(track) < 2:
         return track
     # index of the nearest point to the start
-    offset: int = np.argmax(  # type: ignore[assignment]
-        np_geo_distance(start, track) < CHECKPOINT_RADIUS
-    )
+    offset: int = np.argmax(np_geo_distance(start, track) < CHECKPOINT_RADIUS)  # type: ignore[assignment]
     # how many meters before the start
     prolog: np.float64 = track[offset][3]
     # decrease the distance column
     track[offset:, 3] = track[offset:, 3] - prolog
     return track[offset:]
-
-
-"""
-def down_sample_mask_pure(track: FloatArray) -> List[bool]:
-    mask = [True] + [False] * (track.shape[0] - 1)
-    i = 0
-    while i < track.shape[0] - 1:
-        j = i
-        while j < track.shape[0] - 1:
-            j += 1
-            if geo_distance(*track[i][0:2], *track[j][0:2]) > DOWN_SAMPLE_INTERVAL:
-                mask[j] = True
-                break
-        i = j
-    return mask
-"""
 
 
 def down_sample_mask(
@@ -106,13 +79,9 @@ def down_sample_mask(
         # accept the current point
         mask[i] = True
         # build a distance vector ahead : [ i+1, ... i+ahead ]
-        distance: FloatArray = np_geo_distance(
-            track[i], track[i + 1 : i + ahead + 1]  # noqa: E203
-        )
+        distance: FloatArray = np_geo_distance(track[i], track[i + 1 : i + ahead + 1])  # noqa: E203
         # find the first point far enough
-        offset: int = np.argmax(  # type: ignore[assignment]
-            ~np.isnan(distance) & (distance > interval)
-        )
+        offset: int = np.argmax(~np.isnan(distance) & (distance > interval))  # type: ignore[assignment]
         if offset == 0:
             # the first point is good
             if not np.isnan(distance[0]) and distance[0] > interval:
