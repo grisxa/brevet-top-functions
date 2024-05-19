@@ -4,13 +4,13 @@ from typing import List
 
 import numpy as np
 
-from brevet_top_numpy_utils import FloatArray
+from brevet_top_numpy_utils import FloatArray, np_geo_distance_track
 
 from .api import (auth_token, get_activities, get_activity, get_track_points,  # noqa: F401
                   refresh_tokens, TimeWindow, time_window, tokens_expired)  # noqa: F401
 from .build import build_checkpoint_list  # noqa: F401
 from .exceptions import ActivityError, ActivityNotFound, AthleteNotFound  # noqa: F401
-from .math import np_align_track_to_route, np_geo_distance_track
+from .math import np_align_track_to_route
 from .simplify import (clear_stops, cut_off_epilog, cut_off_prolog,
                        down_sample_mask)
 
@@ -39,7 +39,6 @@ def track_alignment(
     draft: FloatArray,
     checkpoints: FloatArray,
 ) -> FloatArray:
-
     logging.info(f"Full track length {len(draft)}")
 
     start = timer()

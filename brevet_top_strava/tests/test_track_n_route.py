@@ -6,28 +6,16 @@ import numpy as np
 import pytest
 from matplotlib import pyplot as plt
 
-from brevet_top_numpy_utils import FloatArray
-from brevet_top_strava import (
-    cut_off_prolog,
-    cut_off_epilog,
-    np_align_track_to_route,
-    clear_stops,
-)
-from brevet_top_strava.math import (
-    np_geo_distance_track,
-    DISTANCE_FACTOR,
-)
+from brevet_top_numpy_utils import (DISTANCE_FACTOR, FloatArray,
+                                    np_geo_distance_track)
+from brevet_top_strava import (clear_stops, cut_off_epilog, cut_off_prolog,
+                               np_align_track_to_route)
 from brevet_top_strava.simplify import down_sample_mask
 
 
 @pytest.fixture
 def route() -> FloatArray:
-    file_path = (
-        pathlib.Path(__file__).parent.absolute()
-        / "files"
-        / "track_n_route"
-        / "route.csv"
-    )
+    file_path = pathlib.Path(__file__).parent.absolute() / "files" / "track_n_route" / "route.csv"
     with open(file_path, newline="", encoding="utf-8") as csv_file:
         table = csv.reader(csv_file, delimiter=",", quotechar='"')
         return np.array([row for row in table], dtype=np.float64)
@@ -35,12 +23,7 @@ def route() -> FloatArray:
 
 @pytest.fixture
 def track() -> FloatArray:
-    file_path = (
-        pathlib.Path(__file__).parent.absolute()
-        / "files"
-        / "track_n_route"
-        / "track.csv"
-    )
+    file_path = pathlib.Path(__file__).parent.absolute() / "files" / "track_n_route" / "track.csv"
     with open(file_path, newline="", encoding="utf-8") as csv_file:
         table = csv.reader(csv_file, delimiter=",", quotechar='"')
         return np.array([row for row in table], dtype=np.float64)
@@ -73,22 +56,12 @@ def checkpoints() -> FloatArray:
 
 @pytest.fixture
 def csv_file():
-    file_path = (
-        pathlib.Path(__file__).parent.absolute()
-        / "files"
-        / "track_n_route"
-        / "reduced.csv"
-    )
+    file_path = pathlib.Path(__file__).parent.absolute() / "files" / "track_n_route" / "reduced.csv"
     with open(file_path, "a", newline="", encoding="utf-8") as csv_file_handler:
-        yield csv.writer(
-            csv_file_handler, delimiter=",", quotechar='"', quoting=csv.QUOTE_MINIMAL
-        )
+        yield csv.writer(csv_file_handler, delimiter=",", quotechar='"', quoting=csv.QUOTE_MINIMAL)
 
 
-def test_track_n_route(
-    route: FloatArray, track: FloatArray, checkpoints: FloatArray  # , csv_file
-):
-
+def test_track_n_route(route: FloatArray, track: FloatArray, checkpoints: FloatArray):  # , csv_file
     assert len(route) == 92
     assert len(track) == 13176
     assert len(checkpoints) == 16
