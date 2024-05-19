@@ -8,3 +8,4 @@ brevet-top-gcp-utils==0.1.4
 brevet-top-numpy-utils==0.1.1
 brevet-top-strava==0.1.3
 garmin-fit-sdk==21.141.0
+more-itertools==9.1.0

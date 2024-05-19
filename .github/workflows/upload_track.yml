@@ -81,7 +81,7 @@ jobs:
         name: Deploy track upload trigger to the cloud
         uses: google-github-actions/deploy-cloud-functions@v1.0.1
         with:
-          name: 'upload_track'
+          name: 'uploadTrack'
           runtime: 'python39'
           source_dir: upload_track
           entry_point: upload_track
