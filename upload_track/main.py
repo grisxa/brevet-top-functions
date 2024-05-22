@@ -118,7 +118,7 @@ def upload_track(request: Request, auth: dict):
                     create_rider_barcode(
                         data["riderUid"],
                         code=ids[i],
-                        time=datetime.fromtimestamp(cp[2], tz=utc),
+                        time=datetime.fromtimestamp(int(cp[2]), tz=utc),
                     )
 
             return json.dumps({"data": {"message": len(points)}}), 200
