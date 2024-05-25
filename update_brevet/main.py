@@ -52,7 +52,10 @@ def update_time(doc_path: str, data: dict):
     logging.info(f"Brevet change of {doc_path} to {start_date} / {length} km")
 
     if length and start_date:
-        change = {"endDate": start_date + timedelta(hours=get_limit_hours(length))}
+        change = {
+            "endDate": start_date + timedelta(hours=get_limit_hours(length)),
+            "openDate": start_date - timedelta(minutes=30),
+        }
         save_doc(doc_path, change)
     # TODO: update checkpoints
 
