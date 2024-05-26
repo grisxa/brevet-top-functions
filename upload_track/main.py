@@ -77,7 +77,7 @@ def upload_track(request: Request, auth: dict):
 
     try:
         if brevet_uid:  # previously created document
-            if False and rider_uid != auth.get("uid"):
+            if rider_uid != auth.get("uid"):
                 return (
                     json.dumps(
                         {
