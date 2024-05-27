@@ -77,6 +77,7 @@ def upload_track(request: Request, auth: dict):
 
     try:
         if brevet_uid:  # previously created document
+            logging.info(f"Uploading track to brevet {brevet_uid} rider {rider_uid}")
             if rider_uid != auth.get("uid"):
                 return (
                     json.dumps(
@@ -110,6 +111,7 @@ def upload_track(request: Request, auth: dict):
 
             # the main alignment routine
             points = track_alignment(brevet_dict, draft, checkpoints)
+            logging.info(f"{len(points)} points found")
 
             # register check-ins / check-outs
             for i, cp in enumerate(points):
