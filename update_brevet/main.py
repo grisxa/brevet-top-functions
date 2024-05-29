@@ -82,6 +82,10 @@ def get_limit_hours(distance: int) -> float:
         return 0.0
     elif distance <= 60:
         return 1 + distance / 20
+    elif 200 <= distance < 220:
+        return (distance - 200)/15 + 13.5
+    elif 400 <= distance < 420:
+        return (distance - 400)/15 + 27
     elif distance <= 600:
         return distance / 15
     elif distance <= 1000:
