@@ -20,8 +20,8 @@ from brevet_top_strava import (ActivityError, ActivityNotFound, AthleteNotFound,
 
 log_client = google.cloud.logging.Client()
 log_client.get_default_handler()
-log_client.setup_logging(log_level=os.getenv("LOG_LEVEL", "WARNING"))
-logging.basicConfig(level=os.getenv("LOG_LEVEL", "WARNING"))
+log_client.setup_logging(log_level=os.getenv("LOG_LEVEL", "INFO"))
+logging.basicConfig(level=os.getenv("LOG_LEVEL", "INFO"))
 
 firebase_admin.initialize_app()
 db_client = google.cloud.firestore.Client()
@@ -100,7 +100,7 @@ def strava_compare(athlete_id: int, activity_id: int, secret: dict):
     activity: Optional[dict] = None
 
     for rider_dict in riders:
-        logging.debug(f"Rider {rider_dict['uid']}")
+        logging.info(f"Rider {rider_dict['uid']}")
 
         # use the athlete's tokens
         tokens = rider_dict["strava"]
@@ -128,7 +128,7 @@ def strava_compare(athlete_id: int, activity_id: int, secret: dict):
         raise Exception(f"Brevet on {start_date} not found")
 
     for brevet_dict in brevets:
-        logging.debug(f"Brevet {brevet_dict['uid']}")
+        logging.info(f"Brevet {brevet_dict['uid']}")
 
         # convert stored GeoPoints
         brevet_dict["short_track"] = [
