@@ -10,7 +10,7 @@ import google.cloud.logging
 from google.cloud.functions.context import Context
 
 from brevet_top_gcp_utils import route_point_to_firestore
-from brevet_top_plot_a_route import get_route_info, ROUTE_PREFIX
+from brevet_top_plot_a_route import ROUTE_PREFIX, get_route_info
 
 log_client = google.cloud.logging.Client()
 log_client.get_default_handler()
@@ -57,7 +57,18 @@ def update_time(doc_path: str, data: dict):
             "openDate": start_date - timedelta(minutes=30),
         }
         save_doc(doc_path, change)
-    # TODO: update checkpoints
+
+    if start_date:
+        for cp in db_client.document(doc_path).collection("checkpoints").get():
+            checkpoint = cp.to_dict()
+            start, end = get_control_window(checkpoint.get("distance", 0))
+            save_doc(
+                f"{doc_path}/checkpoints/{checkpoint['uid']}",
+                {
+                    "startDate": start_date + timedelta(hours=start),
+                    "endDate": start_date + timedelta(hours=end),
+                },
+            )
 
 
 def save_doc(path: str, data: dict):
@@ -71,27 +82,65 @@ def save_doc(path: str, data: dict):
     doc.set(data, merge=True)
 
 
+def get_control_window(distance: float) -> tuple[float, float]:
+    """
+    Calculate the time window on the control point based on the average speed and distance.
+    """
+    if distance == 0:
+        return 0.0, 1.0
+    elif distance <= 60:
+        return distance / 34 + 0.008333333333334, distance / 20 + 1.008333333333334
+    elif 60 < distance <= 200:
+        return (
+            distance / 34 + 0.008333333333334,
+            (distance - 60) / 15 + 4.008333333333334,
+        )
+    elif 200 < distance <= 400:
+        return (distance - 200) / 32 + 5.890686274509805, (
+            distance - 60
+        ) / 15 + 4.008333333333334
+    elif 400 < distance <= 600:
+        return (distance - 400) / 30 + 12.140333333333333, (
+            distance - 60
+        ) / 15 + 4.008333333333334
+    elif 600 < distance <= 1000:
+        return (distance - 600) / 28 + 18.807, (
+            distance - 600
+        ) / 11.428571428571429 + 40.008333333333334
+    elif 1000 < distance <= 1200:
+        return (distance - 1000) / 26 + 33.09304761904762, (
+            distance - 1000
+        ) / 13.333333333333333 + 75.008333333333334
+    elif 1200 < distance <= 1400:
+        return (distance - 1200) / 25 + 40.78564102564103, (
+            distance - 1200
+        ) / 11 + 90.008333333333334
+    elif 1400 < distance <= 1800:
+        return (distance - 1200) / 25 + 40.78564102564103, (
+            distance - 1400
+        ) / 10 + 108.19015151515153
+    elif 1800 < distance <= 2000:
+        return (distance - 1800) / 24 + 64.78533333333334, (
+            distance - 1800
+        ) / 9 + 148.19033333333334
+
+
 def get_limit_hours(distance: int) -> float:
     """
-    Calculate the time limit based on the average speed:
-    . 1 hour + 20 km/h (km 1 tp 60);
-    . 15 km/h (km 61 to 600);
-    . 11,428 km/h (km 601 to 1000);
+    Calculate the brevet time limit based on the distance
     """
     if distance == 0:
         return 0.0
-    elif distance <= 60:
-        return 1 + distance / 20
-    elif 200 <= distance < 220:
-        return (distance - 200)/15 + 13.5
+    elif distance < 220:
+        return (distance - 200) / 15 + 13.5
+    # 300 the same as 600
     elif 400 <= distance < 420:
-        return (distance - 400)/15 + 27
-    elif distance <= 600:
+        return (distance - 400) / 15 + 27
+    elif distance <= 620:
         return distance / 15
-    elif distance <= 1000:
-        return (distance - 600) / 11.428 + 40
-    # TODO: update the default value
-    return (distance - 600) / 11.428 + 40
+    elif distance <= 1020:
+        return (distance - 600) / 11.428571428571429 + 40
+    return (distance - 1000) / 13.333333333333333 + 75
 
 
 def update_route(doc_path: str, data: dict):
