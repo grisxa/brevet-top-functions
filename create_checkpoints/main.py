@@ -58,10 +58,8 @@ def create_checkpoints(request: Request, auth: dict):
             start, end = get_control_window(cp.distance)
             control_data: dict = route_point_to_firestore(cp)
             control_data["displayName"] = cp.name
-            control_data["startDate"] = (
-                brevet_dict["startDate"] + timedelta(hours=start),
-            )
-            control_data["endDate"] = (brevet_dict["startDate"] + timedelta(hours=end),)
+            control_data["startDate"] = brevet_dict["startDate"] + timedelta(hours=start)
+            control_data["endDate"] = brevet_dict["startDate"] + timedelta(hours=end)
             control_data["brevet"] = {
                 "uid": doc_uid,
                 "name": brevet_dict["name"],
