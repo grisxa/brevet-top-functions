@@ -54,7 +54,7 @@ class RoutePoint(PlotARoutePoint):
 
         :return: True or False
         """
-        prefixes: list[str] = ["CP", "КП", "Start", "Старт", "End", "Финиш"]
+        prefixes: list[str] = ["CP", "КП", "MT", "МТ", "Start", "Старт", "End", "Финиш"]
 
         direction: str = self.dir or ""
         label: str = self.labtxt or ""
