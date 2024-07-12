@@ -75,9 +75,9 @@ def time_window(brevet: dict) -> TimeWindow:
     before: datetime = brevet.get("endDate")
     params: TimeWindow = {}
     if after is not None:
-        params["after"] = (after - timedelta(hours=2)).timestamp()
+        params["after"] = (after - timedelta(hours=36)).timestamp()
     if before is not None:
-        params["before"] = (before + timedelta(hours=2)).timestamp()
+        params["before"] = (before + timedelta(hours=36)).timestamp()
     # logging.info(f"activity time window {params}")
     return params
 
