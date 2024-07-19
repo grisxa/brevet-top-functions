@@ -86,4 +86,5 @@ jobs:
           source_dir: upload_track
           entry_point: upload_track
           env_vars: LOG_LEVEL=DEBUG
-          timeout: 180
+          timeout: 300
+          memory_mb: 512
