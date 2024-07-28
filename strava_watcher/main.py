@@ -180,17 +180,15 @@ def search_strava_riders(athlete_id: int) -> List[dict]:
 
 
 def search_brevets(start_date: datetime) -> List[dict]:
-    start_date_interval = 36
     logging.debug(
-        f"Lookup brevets in {start_date - timedelta(hours=start_date_interval)} / "
-        f"{start_date + timedelta(hours=start_date_interval)}"
+        f"Lookup brevets in {start_date - timedelta(hours=12)} / {start_date + timedelta(hours=12)}"
     )
     return [
         db_client.document(f"brevets/{doc.id}").get().to_dict()
         for doc in db_client.collection("brevets")
         # lookup +/- 12 hours from the activity start date
-        .where("startDate", ">", start_date - timedelta(hours=start_date_interval))
-        .where("startDate", "<", start_date + timedelta(hours=start_date_interval))
+        .where("startDate", ">", start_date - timedelta(hours=12))
+        .where("startDate", "<", start_date + timedelta(hours=12))
         .stream()
     ]
 
