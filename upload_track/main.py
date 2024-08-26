@@ -1,9 +1,11 @@
 import json
 import logging
+import os
 from base64 import b64decode
 from datetime import datetime
 
 import firebase_admin
+from google.cloud import functions_v1
 import google.cloud.logging
 import gpxpy
 import numpy as np
@@ -117,6 +119,15 @@ def upload_track(request: Request, auth: dict):
                     code=ids[i],
                     time=datetime.fromtimestamp(int(cp[2]), tz=utc),
                 )
+        client = functions_v1.CloudFunctionsServiceClient()
+        client.call_function(request=functions_v1.CallFunctionRequest(
+            name=client.cloud_function_path(
+                project=os.getenv('GCLOUD_PROJECT'),
+                location=os.getenv('FUNCTION_REGION'),
+                function="saveResults",
+            ),
+            data='{"data": {"brevetUid": "%s"}}' % brevet_dict["uid"]
+        ))
 
         return json.dumps({"data": {"message": len(points)}}), 200
 
