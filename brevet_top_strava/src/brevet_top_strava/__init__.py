@@ -21,6 +21,9 @@ CONTROL_DEVIATION_FACTOR: int = 500
 
 
 def search_strava_activities(brevet: dict, tokens: dict, checkpoints: FloatArray) -> FloatArray:
+    """
+    Search for activities in Strava matching the given brevet.
+    """
     # get a list of Strava activities in the given time window
     activities: List[dict] = get_activities(time_window(brevet), auth_token(tokens))
     if len(activities) < 1:
