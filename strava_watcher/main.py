@@ -9,6 +9,7 @@ import firebase_admin
 import google.cloud.firestore
 import google.cloud.logging
 from flask import json
+from google.cloud import functions_v1
 from google.cloud.functions.context import Context
 from pytz import utc
 from requests import HTTPError
@@ -127,6 +128,12 @@ def strava_compare(athlete_id: int, activity_id: int, secret: dict):
     if len(brevets) < 1:
         raise Exception(f"Brevet on {start_date} not found")
 
+    client = functions_v1.CloudFunctionsServiceClient()
+    function_name = client.cloud_function_path(
+        os.getenv('GCLOUD_PROJECT'),
+        os.getenv('FUNCTION_REGION'),
+        "saveResults",
+    )
     for brevet_dict in brevets:
         logging.info(f"Brevet {brevet_dict['uid']}")
 
@@ -165,6 +172,9 @@ def strava_compare(athlete_id: int, activity_id: int, secret: dict):
                         code=ids[i],
                         time=datetime.fromtimestamp(cp[2], tz=utc),
                     )
+        client.call_function(request=functions_v1.CallFunctionRequest(
+            name=function_name, data='{"data": {"brevetUid": "%s"}}' % brevet_dict["uid"]
+        ))
 
 
 def search_strava_riders(athlete_id: int) -> List[dict]:
