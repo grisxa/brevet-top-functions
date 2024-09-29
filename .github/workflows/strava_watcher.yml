@@ -86,7 +86,7 @@ jobs:
           runtime: 'python39'
           source_dir: strava_watcher
           entry_point: strava_watcher
-          env_vars: LOG_LEVEL=INFO
+          env_vars: LOG_LEVEL=INFO,FUNCTION_REGION=us-central1,GCLOUD_PROJECT=baltic-star-cloud
           secret_environment_variables: 'STRAVA=projects/baltic-star-cloud/secrets/strava/versions/latest'
           timeout: 300
           memory_mb: 512

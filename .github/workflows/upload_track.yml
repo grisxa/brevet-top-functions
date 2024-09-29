@@ -85,6 +85,6 @@ jobs:
           runtime: 'python39'
           source_dir: upload_track
           entry_point: upload_track
-          env_vars: LOG_LEVEL=DEBUG
+          env_vars: LOG_LEVEL=DEBUG,FUNCTION_REGION=us-central1,GCLOUD_PROJECT=baltic-star-cloud
           timeout: 300
           memory_mb: 512

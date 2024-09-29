@@ -129,11 +129,6 @@ def strava_compare(athlete_id: int, activity_id: int, secret: dict):
         raise Exception(f"Brevet on {start_date} not found")
 
     client = functions_v1.CloudFunctionsServiceClient()
-    function_name = client.cloud_function_path(
-        os.getenv('GCLOUD_PROJECT'),
-        os.getenv('FUNCTION_REGION'),
-        "saveResults",
-    )
     for brevet_dict in brevets:
         logging.info(f"Brevet {brevet_dict['uid']}")
 
@@ -173,7 +168,12 @@ def strava_compare(athlete_id: int, activity_id: int, secret: dict):
                         time=datetime.fromtimestamp(cp[2], tz=utc),
                     )
         client.call_function(request=functions_v1.CallFunctionRequest(
-            name=function_name, data='{"data": {"brevetUid": "%s"}}' % brevet_dict["uid"]
+            name=client.cloud_function_path(
+                project=os.getenv('GCLOUD_PROJECT'),
+                location=os.getenv('FUNCTION_REGION'),
+                function="saveResults",
+            ),
+            data='{"data": {"brevetUid": "%s"}}' % brevet_dict["uid"]
         ))
 
 
