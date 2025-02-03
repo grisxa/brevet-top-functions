@@ -45,6 +45,8 @@ def import_brevet(request: Request):
             point = cp.get("coordinates", {})
             control_data = {
                 "displayName": cp.get("name"),
+                # TODO: fix the camel case
+                "selfcheck": cp.get("selfCheck"),
                 "selfCheck": cp.get("selfCheck"),
                 "sleep": cp.get("sleep"),
                 "distance": cp.get("distance"),
