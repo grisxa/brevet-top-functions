@@ -30,7 +30,6 @@ def import_brevet(request: Request):
     try:
         brevet_data = dict(
             length=data.get("length"),
-            mapUrl=data.get("mapUrl"),
             name=data.get("name"),
         )
         (timestamp, doc) = db_client.collection("brevets").add(brevet_data)
@@ -69,6 +68,7 @@ def import_brevet(request: Request):
         db_client.collection("brevets").document(doc.id).set(
             {
                 "startDate": dateutil.parser.isoparse(data.get("startDate")),
+                "mapUrl": data.get("mapUrl"),
             },
             merge=True,
         )
