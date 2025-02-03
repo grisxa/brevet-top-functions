@@ -68,6 +68,11 @@ def import_brevet(request: Request):
         db_client.collection("brevets").document(doc.id).set(
             {
                 "startDate": dateutil.parser.isoparse(data.get("startDate")),
+            },
+            merge=True,
+        )
+        db_client.collection("brevets").document(doc.id).set(
+            {
                 "mapUrl": data.get("mapUrl"),
             },
             merge=True,
