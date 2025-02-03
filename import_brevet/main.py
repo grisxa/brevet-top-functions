@@ -81,4 +81,4 @@ def import_brevet(request: Request):
     except Exception as error:
         return json.dumps({"message": str(error)}), 500
 
-    return json.dumps({"data": {"result": "OK"}}), 200
+    return json.dumps({"data": {"result": doc.id}}), 200
