@@ -54,7 +54,7 @@ def update_time(doc_path: str, data: dict):
     if length and start_date:
         change = {
             "endDate": start_date + timedelta(hours=get_limit_hours(length)),
-            "openDate": start_date - timedelta(minutes=30),
+            "openDate": start_date - timedelta(hours=32),
         }
         save_doc(doc_path, change)
 
