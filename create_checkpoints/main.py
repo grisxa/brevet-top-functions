@@ -25,7 +25,7 @@ db_client = google.cloud.firestore.Client()
 @authenticated
 def create_checkpoints(request: Request, auth: dict):
     """
-    Create checkpoints in a nested collection.
+    Create checkpoints in a nested collection and in the brevet document.
 
     :param request: HTTP request
     :param auth: Authentication tokens
@@ -53,6 +53,7 @@ def create_checkpoints(request: Request, auth: dict):
     try:
         info: dict = get_route_info(brevet_dict["mapUrl"])
         checkpoints: List[CheckPoint] = info.pop("checkpoints")
+        checkpoint_list = []
 
         for cp in checkpoints:
             start, end = get_control_window(cp.distance)
@@ -73,6 +74,18 @@ def create_checkpoints(request: Request, auth: dict):
                 },
                 merge=True,
             )
+            checkpoint_list.append({
+                "uid": ref.id,
+                "name": cp.name,
+                "distance": cp.distance,
+                "coordinates": control_data["coordinates"],
+            })
+        doc.set(
+            {
+                "checkpoints": checkpoint_list
+            },
+            merge=True,
+        )
 
     except Exception as error:
         return json.dumps({"message": str(error)}), 500
