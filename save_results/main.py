@@ -66,13 +66,13 @@ def save_results(request: Request):
                         "selfCheck": cp.get("selfcheck"),
                     }
                 )
-                for doc in (
+                for checkin_doc in (
                     brevet_doc.collection("checkpoints")
                     .document(cp["uid"])
                     .collection("riders")
                     .get()
                 ):
-                    checkin = doc.to_dict()
+                    checkin = checkin_doc.to_dict()
                     rider_uid = checkin["uid"]
                     if rider_uid not in brevet_dict["results"]:
                         brevet_dict["results"][rider_uid] = {
@@ -85,10 +85,11 @@ def save_results(request: Request):
                         logging.error(
                             f"Empty time of rider {rider_uid} {checkin['name']}"
                         )
-                    times: List[datetime] = checkin_reorder(checkin["time"])
-                    if len(times) < 1:
+                    checkin_times: List[datetime] = checkin_reorder(checkin["time"])
+                    if len(checkin_times) < 1:
                         continue
-                    brevet_dict["results"][rider_uid]["checkins"][i] = times[0]
+                    brevet_dict["results"][rider_uid]["checkins"][i] = checkin_times
+                    brevet_dict["results"][rider_uid]["checkins"] : list[list[datetime]|None]
             brevet_doc.set(brevet_dict, merge=True)
     except Exception as error:
         logging.error(f"Saving results error {error}")
