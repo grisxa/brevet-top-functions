@@ -71,11 +71,13 @@ def json_export(request: Request):
     except Exception as error:
         return json.dumps({"message": str(error)}), 500
 
-    time_zones = []
+    time_zones = [] # timezone for every checkpoint in brevet
     for cp in payload["checkpoints"]:
         time_zones.append(time_zone_finder(cp["coordinates"]))
     for r in payload["results"]:
         checkins : list[list[datetime]|None]= payload["results"][r]["checkins"]
+        # checkins correspond to checkpoints by order
+        # thus cp_time_zone applied to checkin_time by order
 
         for cp_ind, checkin_times in enumerate(checkins):
             # TODO: extract conversion
