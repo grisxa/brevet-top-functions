@@ -88,8 +88,11 @@ def save_results(request: Request):
                     checkin_times: List[datetime] = checkin_reorder(checkin["time"])
                     if len(checkin_times) < 1:
                         continue
-                    brevet_dict["results"][rider_uid]["checkins"][i] = checkin_times
-                    brevet_dict["results"][rider_uid]["checkins"] : list[list[datetime]|None]
+                    logging.debug("Checkintimes = %s", checkin_times)
+                    brevet_dict["results"][rider_uid]["checkins"][i] = {str(chkin_ind) : time
+                                                                        for chkin_ind, time in enumerate(checkin_times)}
+                    logging.debug("Saved chekins = %s", brevet_dict["results"][rider_uid]["checkins"][i])
+                    brevet_dict["results"][rider_uid]["checkins"] : list[dict[str, datetime]|None]
             brevet_doc.set(brevet_dict, merge=True)
     except Exception as error:
         logging.error(f"Saving results error {error}")

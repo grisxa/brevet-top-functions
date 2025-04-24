@@ -75,7 +75,7 @@ def json_export(request: Request):
     for cp in payload["checkpoints"]:
         time_zones.append(time_zone_finder(cp["coordinates"]))
     for r in payload["results"]:
-        checkins : list[list[datetime]|None]= payload["results"][r]["checkins"]
+        checkins : list[dict[str, datetime]|None] = payload["results"][r]["checkins"]
         # checkins correspond to checkpoints by order
         # thus cp_time_zone applied to checkin_time by order
 
@@ -83,7 +83,7 @@ def json_export(request: Request):
             # TODO: extract conversion
             cp_timezone = time_zones[cp_ind]
             if checkin_times is not None and time_zones[cp_ind] is not None:
-                for time_ind, time in enumerate(checkin_times):
+                for time_ind, time in checkin_times.items():
                     checkin_times[time_ind] = time.astimezone(cp_timezone)
     if payload["startDate"] is not None and time_zones[0] is not None:
         payload["startDate"] = payload["startDate"].astimezone(time_zones[0])
