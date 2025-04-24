@@ -84,7 +84,6 @@ def json_export(request: Request):
                 dates[i] = d.astimezone(time_zones[i])
     if payload["startDate"] is not None and time_zones[0] is not None:
         payload["startDate"] = payload["startDate"].astimezone(time_zones[0])
-    logging.info(f"Payload {payload}")
 
     return (
         json.dumps(
