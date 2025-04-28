@@ -46,6 +46,9 @@ def save_results(request: Request):
     brevet_dict = brevet_doc.get().to_dict()
 
     try:
+        if brevet_dict is None:
+            raise ValueError(f"Brevet {doc_uid} not found")
+
         checkpoints: List[dict] = [
             cp.to_dict() for cp in brevet_doc.collection("checkpoints").get()
         ]

@@ -55,6 +55,8 @@ def json_export(request: Request):
 
     try:
         brevet_dict = brevet_doc.get().to_dict()
+        assert brevet_dict is not None, f"Brevet {doc_uid} not found"
+
         payload = {
             key: brevet_dict.get(key)
             for key in [
