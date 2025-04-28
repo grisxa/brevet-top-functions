@@ -1,6 +1,5 @@
 import logging
 from datetime import datetime
-from typing import List
 
 import firebase_admin
 import google.cloud.firestore
@@ -46,7 +45,7 @@ def save_results(request: Request):
     brevet_dict = brevet_doc.get().to_dict()
 
     try:
-        checkpoints: List[dict] = [
+        checkpoints: list[dict] = [
             cp.to_dict() for cp in brevet_doc.collection("checkpoints").get()
         ]
         checkpoints.sort(key=lambda x: x.get("distance", 0))
@@ -54,7 +53,7 @@ def save_results(request: Request):
         if len(checkpoints) > 0:
             brevet_dict["checkpoints"] = []
             brevet_dict["results"] = {}
-            for i, cp in enumerate(checkpoints):
+            for cp_index, cp in enumerate(checkpoints):
                 brevet_dict["checkpoints"].append(
                     {
                         "uid": cp["uid"],
@@ -85,12 +84,16 @@ def save_results(request: Request):
                         logging.error(
                             f"Empty time of rider {rider_uid} {checkin['name']}"
                         )
-                    checkin_times: List[datetime] = checkin_reorder(checkin["time"])
+                        continue
+                    checkin_times: list[datetime] = checkin_reorder(checkin["time"])
                     if len(checkin_times) < 1:
                         continue
-                    brevet_dict["results"][rider_uid]["checkins"][i] = {str(chkin_ind) : time
-                                                                        for chkin_ind, time in enumerate(checkin_times)}
-                    brevet_dict["results"][rider_uid]["checkins"] : list[dict[str, datetime]|None]
+                    brevet_dict["results"][rider_uid]["checkins"][cp_index]: dict[
+                        str, datetime
+                    ] = {
+                        str(checkin_index): time
+                        for checkin_index, time in enumerate(checkin_times)
+                    }
             brevet_doc.set(brevet_dict, merge=True)
     except Exception as error:
         logging.error(f"Saving results error {error}")

@@ -1,5 +1,5 @@
 import logging
-from datetime import datetime
+from datetime import datetime, tzinfo
 
 import firebase_admin
 import google.cloud.firestore
@@ -71,23 +71,24 @@ def json_export(request: Request):
     except Exception as error:
         return json.dumps({"message": str(error)}), 500
 
-    time_zones = [] # timezone for every checkpoint in brevet
+    time_zones: list[tzinfo | None] = []  # timezone for every checkpoint in brevet
     for cp in payload["checkpoints"]:
         time_zones.append(time_zone_finder(cp["coordinates"]))
+
     for r in payload["results"]:
-        checkins : list[dict[str, datetime]|None] = payload["results"][r]["checkins"]
+        checkins: list[dict[str, datetime] | None] = payload["results"][r]["checkins"]
         # checkins correspond to checkpoints by order
         # thus cp_time_zone applied to checkin_time by order
 
-        for cp_ind, checkin_times in enumerate(checkins):
+        for cp_index, checkin_times in enumerate(checkins):
             # TODO: extract conversion
-            cp_timezone = time_zones[cp_ind]
-            if checkin_times is not None and time_zones[cp_ind] is not None:
-                for time_ind, time in checkin_times.items():
-                    checkin_times[time_ind] = time.astimezone(cp_timezone)
+            cp_timezone = time_zones[cp_index]
+            if checkin_times is not None and time_zones[cp_index] is not None:
+                for time_index, time in checkin_times.items():
+                    checkin_times[time_index] = time.astimezone(cp_timezone)
+
     if payload["startDate"] is not None and time_zones[0] is not None:
         payload["startDate"] = payload["startDate"].astimezone(time_zones[0])
-    logging.info(f"Payload {payload}")
 
     return (
         json.dumps(
@@ -109,7 +110,7 @@ def serialize_google(x):
 
 
 # TODO: consider namedtuple("LatLng", ["lat", "lng"])
-def time_zone_finder(coordinates: GeoPoint):
+def time_zone_finder(coordinates: GeoPoint) -> tzinfo | None:
     if coordinates is None:
         return None
     else:
