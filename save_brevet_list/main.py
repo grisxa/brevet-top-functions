@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime, timezone
 
 import firebase_admin
 import google.cloud.logging
@@ -37,10 +38,23 @@ def save_brevet_list(request: Request, auth: dict):
         )
 
     try:
-        brevet_list = []
-        for doc in db_client.collection("brevets").order_by("startDate", direction=Query.DESCENDING).stream():
+        list_doc = db_client.collection("brevets").document("list")
+
+        list_dict = list_doc.get().to_dict() if list_doc.get().exists else {}
+        brevets: dict[str, dict] = {
+            brevet.get("uid"): brevet for brevet in list_dict.get("brevets", [])
+        }
+        last_update = list_dict.get("last_update")
+
+        query = db_client.collection("brevets").order_by(
+            "startDate", direction=Query.DESCENDING
+        )
+        if last_update is not None:
+            query = query.where("startDate", ">=", last_update)
+
+        for doc in query.stream():
             brevet_dict = db_client.document(f"brevets/{doc.id}").get().to_dict()
-            brevet_list.append({
+            brevets[brevet_dict.get("uid")] = {
                 key: brevet_dict.get(key)
                 for key in [
                     "uid",
@@ -50,14 +64,15 @@ def save_brevet_list(request: Request, auth: dict):
                     "mapUrl",
                     "endDate",
                 ]
-            })
-        # retrieve document
-        list_doc = db_client.document("brevets/list")
-        list_dict = list_doc.get().to_dict()
+            }
 
         # update the list
-        list_dict["brevets"] = brevet_list
-        db_client.collection("brevets").document("list").set(list_dict, merge=True)
+        list_dict["brevets"] = sorted(
+            brevets.values(), key=lambda brevet: brevet.get("startDate"), reverse=True
+        )
+        list_dict["last_update"] = datetime.now(timezone.utc)
+
+        list_doc.set(list_dict, merge=True)
     except Exception as error:
         return json.dumps({"message": str(error)}), 500
 
