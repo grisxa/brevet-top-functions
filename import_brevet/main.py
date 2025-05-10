@@ -28,9 +28,14 @@ def import_brevet(request: Request):
     data: dict = request.get_json().get("data", {})
 
     try:
+        end_date = data.get("endDate")
         brevet_data = dict(
             length=data.get("length"),
             name=data.get("name"),
+            mapUrl=data.get("mapUrl"),
+            startDate=dateutil.parser.isoparse(data.get("startDate")),
+            endDate=dateutil.parser.isoparse(end_date) if end_date else None,
+            skip_trim=data.get("skip_trim", False),
         )
         (timestamp, doc) = db_client.collection("brevets").add(brevet_data)
         db_client.collection("brevets").document(doc.id).set(
@@ -65,18 +70,6 @@ def import_brevet(request: Request):
                 },
                 merge=True,
             )
-        db_client.collection("brevets").document(doc.id).set(
-            {
-                "startDate": dateutil.parser.isoparse(data.get("startDate")),
-            },
-            merge=True,
-        )
-        db_client.collection("brevets").document(doc.id).set(
-            {
-                "mapUrl": data.get("mapUrl"),
-            },
-            merge=True,
-        )
 
     except Exception as error:
         return json.dumps({"message": str(error)}), 500
