@@ -44,8 +44,9 @@ def get_track_start_point(activity: dict) -> Tuple[float, float, float, float]:
     :param activity: Strava activity dict
     :return: a tuple (latitude, longitude, timestamp, distance=0)
     """
-    lat: float = float(activity["start_latlng"][0])
-    lng: float = float(activity["start_latlng"][1])
+    start_point: list[float] = activity["start_latlng"]
+    lat: float = float(start_point[0]) if len(start_point) > 0 else 0.0
+    lng: float = float(start_point[1]) if len(start_point) > 0 else 0.0
     try:
         date: float = dateutil.parser.isoparse(
             activity.get("start_date", "")
@@ -67,14 +68,17 @@ def build_track(
     :param stream: Strava streams {latlng, distance, time}
     :return: array of [latitude, longitude, timestamp, distance]
     """
-    lat, lng = np.array(stream.get("latlng", {}).get("data", []), dtype=np.float64).T
-    distance: FloatArray = (
-        np.array(stream.get("distance", {}).get("data", []), dtype=np.float64)
-        + start_distance
-    )
-    time: FloatArray = (
-        np.array(stream.get("time", {}).get("data", []), dtype=np.float64)
-        + start_timestamp
-    )
+    try:
+        lat, lng = np.array(stream.get("latlng", {}).get("data", []), dtype=np.float64).T
+        distance: FloatArray = (
+            np.array(stream.get("distance", {}).get("data", []), dtype=np.float64)
+            + start_distance
+        )
+        time: FloatArray = (
+            np.array(stream.get("time", {}).get("data", []), dtype=np.float64)
+            + start_timestamp
+        )
 
-    return np.array([lat, lng, time, distance], dtype=np.float64).T
+        return np.array([lat, lng, time, distance], dtype=np.float64).T
+    except ValueError as error:
+        raise ValueError("Broken track") from error
