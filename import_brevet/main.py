@@ -1,4 +1,5 @@
 import logging
+from datetime import timedelta
 
 import dateutil.parser
 import firebase_admin
@@ -16,6 +17,7 @@ logging.basicConfig(level=logging.DEBUG)
 firebase_admin.initialize_app()
 db_client = google.cloud.firestore.Client()
 
+EARLY_START = 32  # hours before
 
 @cross_origin(methods="POST")
 def import_brevet(request: Request):
@@ -28,13 +30,15 @@ def import_brevet(request: Request):
     data: dict = request.get_json().get("data", {})
 
     try:
+        start_date = dateutil.parser.isoparse(data.get("startDate"))
         end_date = data.get("endDate")
         brevet_data = dict(
             length=data.get("length"),
             name=data.get("name"),
             mapUrl=data.get("mapUrl"),
-            startDate=dateutil.parser.isoparse(data.get("startDate")),
+            startDate=start_date,
             endDate=dateutil.parser.isoparse(end_date) if end_date else None,
+            openDate=start_date - timedelta(hours=EARLY_START),
             skip_trim=data.get("skip_trim", False),
         )
         (timestamp, doc) = db_client.collection("brevets").add(brevet_data)
