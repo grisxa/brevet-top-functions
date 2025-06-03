@@ -20,6 +20,7 @@ logging.basicConfig(level=os.getenv("LOG_LEVEL", "WARNING"))
 firebase_admin.initialize_app()
 db_client = google.cloud.firestore.Client()
 
+EARLY_START = 32  # hours before
 
 def update_brevet(data, context: Context):
     """
@@ -54,7 +55,7 @@ def update_time(doc_path: str, data: dict):
     if length and start_date:
         change = {
             "endDate": start_date + timedelta(hours=get_limit_hours(length)),
-            "openDate": start_date - timedelta(hours=32),
+            "openDate": start_date - timedelta(hours=EARLY_START),
         }
         save_doc(doc_path, change)
 
