@@ -50,6 +50,7 @@ def import_brevet(request: Request):
             merge=True,
         )
 
+        brevet_checkpoints = []
         for cp in data.get("checkpoints"):
             point = cp.get("coordinates", {})
             control_data = {
@@ -75,6 +76,22 @@ def import_brevet(request: Request):
                 },
                 merge=True,
             )
+
+            brevet_checkpoints.append(dict(
+                name=control_data["displayName"],
+                sleep=control_data["sleep"],
+                distance=control_data["distance"],
+                coordinates=control_data["coordinates"],
+                selfCheck=control_data["selfCheck"],
+                uid=ref.id,
+            ))
+
+        db_client.collection("brevets").document(doc.id).set(
+            {
+                "checkpoints": brevet_checkpoints,
+            },
+            merge=True,
+        )
 
     except Exception as error:
         return json.dumps({"message": str(error)}), 500
