@@ -32,13 +32,14 @@ def import_brevet(request: Request):
     try:
         start_date = dateutil.parser.isoparse(data.get("startDate"))
         end_date = data.get("endDate")
+        open_date = data.get("openDate")
         brevet_data = dict(
             length=data.get("length"),
             name=data.get("name"),
             mapUrl=data.get("mapUrl"),
             startDate=start_date,
             endDate=dateutil.parser.isoparse(end_date) if end_date else None,
-            openDate=start_date - timedelta(hours=EARLY_START),
+            openDate=dateutil.parser.isoparse(open_date) if open_date else start_date - timedelta(hours=EARLY_START),
             skip_trim=data.get("skip_trim", False),
         )
         (timestamp, doc) = db_client.collection("brevets").add(brevet_data)
