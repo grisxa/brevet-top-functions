@@ -30,7 +30,7 @@ dependencies = [
   "numpy>=1.21.5",
   "numpy-hirschberg==0.1.1",
   "brevet-top-plot-a-route",
-  "brevet-top-numpy-utils==0.1.1",
+  "brevet-top-numpy-utils>=0.1.1",
 ]
 
 [project.urls]
