@@ -25,7 +25,9 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
 dependencies = [
-  "numpy>=1.21.5"
+  "numpy>=1.21.5",
+  "garmin-fit-sdk==21.141.0",
+  "gpxpy~=1.5.0",
 ]
 
 [project.urls]
