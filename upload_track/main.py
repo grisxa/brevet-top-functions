@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import json
 import logging
 import os
@@ -8,17 +10,14 @@ import firebase_admin
 from google.cloud import functions_v1
 import google.cloud.logging
 import gpxpy
-import numpy as np
 from brevet_top_gcp_utils import (create_document, firestore_to_track_point,
                                   get_checkpoints, resolve_document)
 from brevet_top_gcp_utils.auth_decorator import authenticated
-from brevet_top_numpy_utils import FloatArray
+from brevet_top_numpy_utils import FloatArray, build_array_from_gpx, build_array_from_fit
 from brevet_top_strava import (ActivityError, build_checkpoint_list,
                                track_alignment, ActivityNotFound)
 from flask import Request
 from flask_cors import cross_origin
-from garmin_fit_sdk import Decoder, Stream, Profile
-from gpxpy.gpx import GPX
 from pytz import utc
 
 log_client = google.cloud.logging.Client()
@@ -28,8 +27,6 @@ logging.basicConfig(level=logging.DEBUG)
 
 firebase_admin.initialize_app()
 db_client = google.cloud.firestore.Client()
-
-GARMIN_FIT_BASE = 11930465
 
 
 @cross_origin(methods="POST")
@@ -103,7 +100,7 @@ def upload_track(request: Request, auth: dict):
         ]
 
         # prepare a list of control points (check-in / check-out) mandatory to visit
-        cps = get_checkpoints(brevet_dict["uid"], db=db_client)
+        cps = brevet_dict["checkpoints"] or get_checkpoints(brevet_dict["uid"], db=db_client)
         checkpoints, ids = build_checkpoint_list(cps)
 
         # the main alignment routine
@@ -136,55 +133,6 @@ def upload_track(request: Request, auth: dict):
     except Exception as error:
         logging.exception(error)
         return json.dumps({"data": {"message": str(error), "error": 500}}), 500
-
-
-def build_array_from_gpx(data: GPX) -> FloatArray:
-    """
-    Compose a track sequence out of GPX data. The point's comment may be a distance.
-
-    :param data: the track data from the GPX file
-    :return: array of [latitude, longitude, timestamp, distance]
-    """
-    draft: FloatArray = np.empty(shape=(0, 4), dtype=np.float64)
-    for track in data.tracks:
-        for segment in track.segments:
-            points = [
-                [
-                    point.latitude,
-                    point.longitude,
-                    point.time.timestamp(),
-                    float(point.comment or 0) / 1000,
-                ]
-                for point in segment.points
-            ]
-            draft = np.concatenate((draft, points), axis=0)
-    return draft
-
-
-def build_array_from_fit(data: bytes) -> FloatArray:
-    """
-    Compose a track sequence out of FIT data.
-
-    :param data: the track data from the FIT file
-    :return: array of [latitude, longitude, timestamp, distance]
-    """
-    stream = Stream.from_byte_array(bytearray(data))
-    decoder = Decoder(stream)
-
-    draft: FloatArray = np.empty(shape=(0, 4), dtype=np.float64)
-    track_points = []
-
-    def mesg_listener(mesg_num, message):
-        if mesg_num == Profile['mesg_num']['RECORD']:
-            track_points.append([
-                message.get("position_lat", 0) / GARMIN_FIT_BASE,
-                message.get("position_long", 0) / GARMIN_FIT_BASE,
-                message.get("timestamp").timestamp(),
-                message.get("distance", 0) / 1000,
-            ])
-
-    decoder.read(mesg_listener=mesg_listener)
-    return np.concatenate((draft, track_points), axis=0)
 
 
 def create_rider_barcode(rider_uid: str, code: str, time: datetime) -> str:

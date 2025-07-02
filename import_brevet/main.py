@@ -5,6 +5,7 @@ import dateutil.parser
 import firebase_admin
 import google.cloud.firestore
 import google.cloud.logging
+from brevet_top_misc_utils import get_limit_hours
 from flask import Request, json
 from flask_cors import cross_origin
 from google.cloud.firestore_v1 import GeoPoint
@@ -38,12 +39,13 @@ def import_brevet(request: Request):
         end_date = data.get("endDate")
         open_date = data.get("openDate")
         map_url = data.get("mapUrl")
+        length = int(data.get("length") or 0)
         brevet_data = dict(
-            length=data.get("length"),
+            length=length,
             name=data.get("name"),
             mapUrl=map_url,
             startDate=start_date,
-            endDate=dateutil.parser.isoparse(end_date) if end_date else None,
+            endDate=dateutil.parser.isoparse(end_date) if end_date else start_date + timedelta(hours=get_limit_hours(length)),
             openDate=dateutil.parser.isoparse(open_date) if open_date else start_date - timedelta(hours=EARLY_START),
             skip_trim=data.get("skip_trim", False),
         )

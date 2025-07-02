@@ -6,9 +6,8 @@ google-cloud-logging==2.6.0
 Flask==2.2.5
 flask-cors==3.0.10
 brevet-top-gcp-utils==0.1.4
-brevet-top-numpy-utils==0.1.1
-brevet-top-strava==0.1.4
-garmin-fit-sdk==21.141.0
+brevet-top-numpy-utils==0.1.3
+brevet-top-strava==0.1.8
 gpxpy~=1.5.0
 more-itertools==9.1.0
 pytz~=2021.3
