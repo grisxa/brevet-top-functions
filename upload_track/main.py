@@ -100,7 +100,11 @@ def upload_track(request: Request, auth: dict):
         ]
 
         # prepare a list of control points (check-in / check-out) mandatory to visit
-        cps = brevet_dict["checkpoints"] or get_checkpoints(brevet_dict["uid"], db=db_client)
+        cps = brevet_dict["checkpoints"]
+        if cps:
+            cps = [{**cp, "coordinates": firestore_to_track_point(cp)} for cp in cps if cp.get("uid")]
+        else:
+            cps = get_checkpoints(brevet_dict["uid"], db=db_client)
         checkpoints, ids = build_checkpoint_list(cps)
 
         # the main alignment routine
