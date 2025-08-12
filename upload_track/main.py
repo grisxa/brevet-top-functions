@@ -14,6 +14,7 @@ from brevet_top_gcp_utils import (create_document, firestore_to_track_point,
                                   get_checkpoints, resolve_document)
 from brevet_top_gcp_utils.auth_decorator import authenticated
 from brevet_top_numpy_utils import FloatArray, build_array_from_gpx, build_array_from_fit
+from brevet_top_plot_a_route.utils import geo_distance
 from brevet_top_strava import (ActivityError, build_checkpoint_list,
                                track_alignment, ActivityNotFound)
 from flask import Request
@@ -69,6 +70,14 @@ def upload_track(request: Request, auth: dict):
 
     if len(draft) == 0:
         return json.dumps({"data": {"message": "Empty track", "error": 400}}), 400
+
+    # Update distances
+    for i in range(1, len(draft)):
+        lat1, lng1, _, distance1 = draft[i - 1]
+        lat2, lng2, _, distance2 = draft[i]
+        if distance2:
+            continue
+        draft[i][3] = distance1 + geo_distance(lat1, lng1, lat2, lng2)
 
     try:
         logging.info(f"Uploading track to brevet {brevet_uid} rider {rider_uid}")
