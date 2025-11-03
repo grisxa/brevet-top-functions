@@ -2,8 +2,8 @@ import logging
 from itertools import compress
 from typing import List, Optional
 
+import cloudscraper
 import numpy as np
-import requests
 from rdp import rdp
 
 from .route_point import RoutePoint
@@ -37,10 +37,28 @@ def download_data(route_url: str) -> dict:
     :param route_url: a link to GET
     :return: JSON with results
     """
+    config = {
+        'browser': {
+            'browser': 'firefox',
+            'platform': 'windows',
+            'desktop': True
+        },
+        'delay': 20
+    }
     try:
-        req = requests.get(route_url)
-        req.raise_for_status()
-        return req.json()
+        scraper = cloudscraper.create_scraper(**config)
+
+        scraper.headers.update({
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+            'Accept-Language': 'en-US,en;q=0.5',
+            'Accept-Encoding': 'gzip, deflate',
+            'Connection': 'keep-alive',
+            'Cache-Control': 'max-age=0',
+        })
+
+        response = scraper.get(route_url)
+        response.raise_for_status()
+        return response.json()
     except Exception as error:
         logging.error(f"HTTP error: {error}")
         raise
