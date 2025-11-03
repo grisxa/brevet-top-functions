@@ -7,4 +7,4 @@ flask-cors==3.0.10
 python_dateutil==2.8.2
 brevet-top-gcp-utils==0.1.4
 brevet-top-misc-utils==0.1.0
-brevet-top-plot-a-route==0.1.9
+brevet-top-plot-a-route==0.2.0
