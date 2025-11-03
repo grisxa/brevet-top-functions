@@ -28,6 +28,7 @@ dependencies = [
   "rdp==0.8",
   "numpy>=1.21.5",
   "dataclasses_json==0.5.12",
+  "cloudscraper==1.2.71",
   "brevet-top-numpy-utils"
 ]
 
