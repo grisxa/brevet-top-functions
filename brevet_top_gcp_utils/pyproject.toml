@@ -7,34 +7,42 @@ name = "brevet-top-gcp-utils"
 dynamic = ["version"]
 description = 'Google cloud utils for the brevet.top'
 readme = "README.md"
-requires-python = ">=3.7"
+requires-python = ">=3.10"
 license = "MIT"
-keywords = []
+keywords = ["brevet", "GCP"]
 authors = [
   { name = "Grigorii Batalov", email = "grisxa@gmail.com" },
 ]
 classifiers = [
   "Development Status :: 4 - Beta",
   "Programming Language :: Python",
-  "Programming Language :: Python :: 3.7",
-  "Programming Language :: Python :: 3.8",
-  "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
 dependencies = [
-  "firebase-admin==5.2.0",
-  "google-cloud-firestore==2.3.4",
-  "google-cloud-logging==2.6.0",
+  "firebase-admin==7.5.0",
+  "google-cloud-firestore==2.28.0",
+  "google-cloud-logging==3.16.1",
   "brevet-top-plot-a-route",
 ]
 
 [project.urls]
-Documentation = "https://github.com/unknown/brevet-top-gcp-utils#readme"
-Issues = "https://github.com/unknown/brevet-top-gcp-utils/issues"
-Source = "https://github.com/unknown/brevet-top-gcp-utils"
+Documentation = "https://github.com/grisxa/brevet-top-functions#readme"
+Issues = "https://github.com/grisxa/brevet-top-functions/issues"
+Source = "https://github.com/grisxa/brevet-top-functions"
+
+[tool.uv.sources]
+brevet-top-plot-a-route = { index = "brevet-top-repo" }
+
+[[tool.uv.index]]
+name = "brevet-top-repo"
+url = "https://us-central1-python.pkg.dev/baltic-star-cloud/brevet-top-python-repo/simple/"
+publish = true
 
 [tool.hatch.version]
 path = "src/brevet_top_gcp_utils/__about__.py"
@@ -57,7 +65,7 @@ cov = [
 ]
 
 [[tool.hatch.envs.all.matrix]]
-python = ["3.7", "3.8", "3.9", "3.10", "3.11"]
+python = ["3.10", "3.11", "3.12", "3.13", "3.14"]
 
 [tool.hatch.envs.lint]
 detached = true
