@@ -1,8 +1,8 @@
 import pytest
+from brevet_top_plot_a_route import RoutePoint
 from google.cloud.firestore_v1 import GeoPoint
 
 from brevet_top_gcp_utils import route_point_to_firestore
-from brevet_top_plot_a_route import RoutePoint
 
 
 @pytest.mark.parametrize(

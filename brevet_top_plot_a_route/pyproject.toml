@@ -38,7 +38,7 @@ Issues = "https://github.com/grisxa/brevet-top-functions/issues"
 Source = "https://github.com/grisxa/brevet-top-functions"
 
 [tool.uv.sources]
-brevet-top-plot-a-route = { index = "brevet-top-repo" }
+brevet-top-numpy-utils = { index = "brevet-top-repo" }
 
 [[tool.uv.index]]
 name = "brevet-top-repo"

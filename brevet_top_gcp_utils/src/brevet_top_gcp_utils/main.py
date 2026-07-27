@@ -4,9 +4,8 @@ from typing import Optional, Tuple
 
 import google.cloud.firestore
 import google.cloud.logging
-from google.cloud.firestore import DocumentReference, GeoPoint
-
 from brevet_top_plot_a_route import RoutePoint
+from google.cloud.firestore import DocumentReference, GeoPoint
 
 log_client = google.cloud.logging.Client()
 log_client.get_default_handler()
@@ -73,12 +72,12 @@ def resolve_document(
     if re.match("^\\d+$", doc_uid):
         logging.info(f"Looking for alias of {doc_uid}")
         alias_doc = db.document(f"aliases/{doc_uid}")
-        alias_dict = alias_doc.get().to_dict()
+        alias_dict: dict[str, DocumentReference] | None = alias_doc.get().to_dict()
         if not alias_dict:
-            raise ValueError(f"Alias {doc_uid} not found")
+            raise ValueError(f"Alias {doc_uid} not found")  # noqa: EM102
 
         # retrieve reference
-        return alias_dict.get("brevet_uid")
+        return alias_dict.get("brevet_uid") # type: ignore
     else:
         # retrieve document
         return db.document(f"brevets/{doc_uid}")
