@@ -42,7 +42,7 @@ jobs:
         with:
           name: 'jsonExport'
           environment: GEN_2
-          runtime: 'python314'
+          runtime: 'python311'
           source_dir: json_export
           entry_point: json_export
           service_timeout: 180
