@@ -4,7 +4,7 @@ from gpxpy.gpx import GPX
 from numpy import arccos, cos, isnan, radians, sin
 from numpy import sum as np_sum
 
-from . import FloatArray
+from brevet_top_numpy_utils import FloatArray
 
 DISTANCE_FACTOR = np.float64(0.001)
 EARTH_RADIUS = np.float64(6371e3)
@@ -78,7 +78,7 @@ def build_array_from_gpx(data: GPX) -> FloatArray:
                 [
                     point.latitude,
                     point.longitude,
-                    point.time.timestamp(),
+                    point.time.timestamp() if point.time else 0,
                     float(point.comment or 0) / 1000,
                 ]
                 for point in segment.points
@@ -101,7 +101,7 @@ def build_array_from_fit(data: bytes) -> FloatArray:
     track_points = []
 
     def mesg_listener(mesg_num, message):
-        if mesg_num == Profile['mesg_num']['RECORD']:
+        if mesg_num == Profile["mesg_num"]["RECORD"]:
             track_points.append(
                 [
                     message.get("position_lat", 0) / GARMIN_FIT_BASE,
