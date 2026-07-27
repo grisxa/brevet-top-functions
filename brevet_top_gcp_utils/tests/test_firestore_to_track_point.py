@@ -2,7 +2,6 @@ import pytest
 from google.cloud.firestore_v1 import GeoPoint
 
 from brevet_top_gcp_utils import firestore_to_track_point
-from brevet_top_strava.track_point import StravaTrackPoint
 
 
 @pytest.mark.parametrize(
@@ -16,5 +15,5 @@ from brevet_top_strava.track_point import StravaTrackPoint
         ),
     ],
 )
-def test_firestore_to_track_point(data: dict, point: StravaTrackPoint):
+def test_firestore_to_track_point(data: dict, point: tuple[float, float, float, float]):
     assert firestore_to_track_point(data) == point

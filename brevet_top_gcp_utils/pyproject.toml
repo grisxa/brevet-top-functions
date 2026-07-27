@@ -29,7 +29,6 @@ dependencies = [
   "google-cloud-firestore==2.3.4",
   "google-cloud-logging==2.6.0",
   "brevet-top-plot-a-route",
-  "brevet-top-strava",
 ]
 
 [project.urls]
