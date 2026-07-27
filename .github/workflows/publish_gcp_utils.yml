@@ -70,7 +70,6 @@ jobs:
           PIP_CONFIG_FILE: ~/.pip/pip.conf
         run: |
           cd brevet_top_gcp_utils
-          cat ~/.pip/pip.conf
           python -m build --no-isolation
           pip install ./dist/*.tar.gz
           python -m pytest
