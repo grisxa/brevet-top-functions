@@ -63,7 +63,7 @@ jobs:
           echo "$config" | tail -n +11 > ~/.pip/pip.conf
 
       - name: 'Install build tools'
-        run: python3 -m pip install build pytest pytest-coverage matplotlib hatch twine --user
+        run: python3 -m pip install build pytest pytest-coverage matplotlib hatch hatchling twine --user
 
       - name: 'Build a binary wheel and a source tarball'
         env:
