@@ -1,3 +1,4 @@
-import numpy.typing
+import numpy as np
+import numpy.typing as npt
 
-FloatArray = numpy.typing.NDArray[numpy.float64]
+FloatArray = npt.NDArray[np.float64]
