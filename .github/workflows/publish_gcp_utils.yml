@@ -72,7 +72,7 @@ jobs:
           UV_INDEX_BREVET_TOP_REPO_PASSWORD: ${{ steps.auth_key.outputs.access_token }}
         run: |
           cd brevet_top_gcp_utils
-          python -m hatch build
+          uv run python -m hatch build
           pip install ./dist/*.tar.gz
           python -m pytest
 
