@@ -37,9 +37,10 @@ jobs:
 
       - id: deploy
         name: Deploy brevet result JSON export function to the cloud
-        uses: google-github-actions/deploy-cloud-functions@v1.0.1
+        uses: google-github-actions/deploy-cloud-functions@v4.0.0
         with:
           name: 'jsonExport'
+          environment: GEN_2
           runtime: 'python314'
           source_dir: json_export
           entry_point: json_export
