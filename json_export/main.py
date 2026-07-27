@@ -67,7 +67,7 @@ def json_export(request: Request):
                 "mapUrl",
                 "checkpoints",
                 "results",
-                "track",
+                # "track",  # Omit large track data to minimize payload size
             ]
         }
     except Exception as error:
@@ -120,3 +120,4 @@ def time_zone_finder(coordinates: GeoPoint):
                 lng=coordinates.longitude, lat=coordinates.latitude
             )
         return timezone(timezone_name)
+
