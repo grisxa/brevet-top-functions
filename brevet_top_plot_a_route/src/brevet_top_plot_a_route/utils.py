@@ -6,7 +6,7 @@ import cloudscraper
 import numpy as np
 from rdp import rdp
 
-from .route_point import RoutePoint
+from brevet_top_plot_a_route.route_point import RoutePoint
 
 ROUTE_PREFIX: str = "https://www.plotaroute.com/route/"
 
@@ -88,7 +88,7 @@ def simplify_route(
     :param factor: optional down-sample factor (epsilon in RDP algorithm)
     :return: reduced list of points as [RoutePoint]
     """
-    coordinates: List[List[float]] = [[p.lat or 0, p.lng or 0] for p in points]
+    coordinates: List[List[float]] = [[p.lat or 0, p.lng or 0, 0] for p in points]
     simple_mask = rdp(coordinates, factor, algo="iter", return_mask=True)
     return list(compress(points, simple_mask))
 
