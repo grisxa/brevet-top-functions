@@ -63,17 +63,15 @@ jobs:
           echo "$config" | tail -n +11 > ~/.pip/pip.conf
 
       - name: 'Install build tools'
-        run: python3 -m pip install build pytest pytest-coverage matplotlib hatch hatchling twine --user
+        run: python3 -m pip install build pytest pytest-coverage matplotlib hatch twine --user
 
       - name: 'Build a binary wheel and a source tarball'
         env:
           PIP_CONFIG_FILE: ~/.pip/pip.conf
-          UV_INDEX_BREVET_TOP_REPO_USERNAME: oauth2accesstoken
-          UV_INDEX_BREVET_TOP_REPO_PASSWORD: ${{ steps.auth_key.outputs.access_token }}
         run: |
           cd brevet_top_gcp_utils
           cat ~/.pip/pip.conf
-          python -m hatch build
+          python -m build --no-isolation
           pip install ./dist/*.tar.gz
           python -m pytest
 
