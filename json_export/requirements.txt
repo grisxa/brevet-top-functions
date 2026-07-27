@@ -1,5 +1,5 @@
-# --index-url https://pypi.org/simple/
-# --extra-index-url https://us-central1-python.pkg.dev/baltic-star-cloud/brevet-top-python-repo/simple/
+--index-url https://pypi.org/simple/
+--extra-index-url https://us-central1-python.pkg.dev/baltic-star-cloud/brevet-top-python-repo/simple/
 firebase-admin>=6.5.0,<7.0.0
 google-cloud-firestore>=2.19.0
 google-cloud-logging>=3.11.0

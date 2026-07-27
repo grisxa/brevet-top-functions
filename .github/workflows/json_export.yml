@@ -36,6 +36,14 @@ jobs:
           service_account: 'github-deploy-functions@baltic-star-cloud.iam.gserviceaccount.com'
           token_format: 'access_token'
 
+      - name: Inject Artifact Registry credentials
+        run: |
+          TOKEN="${{ steps.auth.outputs.access_token }}"
+          sed "s|https://us-central1-python.pkg.dev|https://oauth2accesstoken:${TOKEN}@us-central1-python.pkg.dev|g" \
+            json_export/requirements.txt > json_export/requirements.tmp
+          mv json_export/requirements.tmp json_export/requirements.txt
+          cat json_export/requirements.txt 
+
       - id: deploy
         name: Deploy brevet result JSON export function to the cloud
         uses: google-github-actions/deploy-cloud-functions@v4
@@ -47,7 +55,3 @@ jobs:
           entry_point: json_export
           service_timeout: 180
           memory: 512M
-          build_environment_variables: |-
-            UV_DEFAULT_INDEX=https://pypi.org/simple/
-            UV_INDEX=https://oauth2accesstoken:${{ steps.auth.outputs.access_token }}@us-central1-python.pkg.dev/baltic-star-cloud/brevet-top-python-repo/simple/
-            UV_INDEX_STRATEGY=unsafe-best-match
