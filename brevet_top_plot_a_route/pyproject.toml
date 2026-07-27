@@ -38,7 +38,7 @@ Issues = "https://github.com/grisxa/brevet-top-functions/issues"
 Source = "https://github.com/grisxa/brevet-top-functions"
 
 [tool.uv.sources]
-brevet-top-numpy-utils = { index = "brevet-top-repo" }
+brevet-top-plot-a-route = { index = "brevet-top-repo" }
 
 [[tool.uv.index]]
 name = "brevet-top-repo"
@@ -67,7 +67,7 @@ cov = [
 ]
 
 [[tool.hatch.envs.all.matrix]]
-python = ["3.7", "3.8", "3.9", "3.10", "3.11"]
+python = ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
 
 [tool.hatch.envs.lint]
 detached = true
