@@ -40,7 +40,7 @@ jobs:
         uses: google-github-actions/deploy-cloud-functions@v1.0.1
         with:
           name: 'jsonExport'
-          runtime: 'python39'
+          runtime: 'python314'
           source_dir: json_export
           entry_point: json_export
           timeout: 180
