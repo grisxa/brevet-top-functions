@@ -31,9 +31,9 @@ dependencies = [
 ]
 
 [project.urls]
-Documentation = "https://github.com/unknown/brevet-top-numpy-utils#readme"
-Issues = "https://github.com/unknown/brevet-top-numpy-utils/issues"
-Source = "https://github.com/unknown/brevet-top-numpy-utils"
+Documentation = "https://github.com/grisxa/brevet-top-functions#readme"
+Issues = "https://github.com/grisxa/brevet-top-functions/issues"
+Source = "https://github.com/grisxa/brevet-top-functions"
 
 [tool.hatch.version]
 path = "src/brevet_top_numpy_utils/__about__.py"
