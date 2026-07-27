@@ -48,6 +48,7 @@ publish = true
 path = "src/brevet_top_gcp_utils/__about__.py"
 
 [tool.hatch.envs.default]
+installer = "pip"
 dependencies = [
   "coverage[toml]>=6.5",
   "pytest",
