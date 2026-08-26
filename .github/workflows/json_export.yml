@@ -26,23 +26,32 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
 
       - id: auth
         name: 'Authenticate to Google Cloud'
-        uses: 'google-github-actions/auth@v1'
+        uses: 'google-github-actions/auth@v3'
         with:
           workload_identity_provider: 'projects/289323711544/locations/global/workloadIdentityPools/baltic-star-pool/providers/github-actions-provider'
           service_account: 'github-deploy-functions@baltic-star-cloud.iam.gserviceaccount.com'
+          token_format: 'access_token'
+
+      - name: Inject Artifact Registry credentials
+        run: |
+          TOKEN="${{ steps.auth.outputs.access_token }}"
+          sed "s|https://us-central1-python.pkg.dev|https://oauth2accesstoken:${TOKEN}@us-central1-python.pkg.dev|g" \
+            json_export/requirements.txt > json_export/requirements.tmp
+          mv json_export/requirements.tmp json_export/requirements.txt
+          cat json_export/requirements.txt 
 
       - id: deploy
         name: Deploy brevet result JSON export function to the cloud
-        uses: google-github-actions/deploy-cloud-functions@v4.0.0
+        uses: google-github-actions/deploy-cloud-functions@v4
         with:
           name: 'jsonExport'
           environment: GEN_2
-          runtime: 'python314'
+          runtime: 'python311'
           source_dir: json_export
           entry_point: json_export
-          timeout: 180
-          memory_mb: 512
+          service_timeout: 180
+          memory: 512M

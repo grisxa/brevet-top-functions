@@ -25,9 +25,9 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
 dependencies = [
-  "firebase-admin==7.5.0",
-  "google-cloud-firestore==2.28.0",
-  "google-cloud-logging==3.16.1",
+  "firebase-admin>=6.5.0,<7.0.0",
+  "google-cloud-firestore>=2.19.0",
+  "google-cloud-logging>=3.11.0",
   "brevet-top-plot-a-route",
 ]
 
