@@ -19,6 +19,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 firebase_admin.initialize_app()
 db_client = google.cloud.firestore.Client()
+tzf = TimezoneFinder()
 
 
 @cross_origin(methods="GET")
@@ -111,7 +112,6 @@ def time_zone_finder(coordinates: GeoPoint):
     if coordinates is None:
         return None
     else:
-        tzf = TimezoneFinder()
         timezone_name: str = tzf.timezone_at(
             lng=coordinates.longitude, lat=coordinates.latitude
         )
@@ -120,4 +120,3 @@ def time_zone_finder(coordinates: GeoPoint):
                 lng=coordinates.longitude, lat=coordinates.latitude
             )
         return timezone(timezone_name)
-
